@@ -147,31 +147,37 @@
     </div>
 
     <script>
+    // FUNGSI APPROVE YANG BOLEH PATAH BALIK (TOGGLE)
     function handleApprove(btn) {
-        btn.classList.add('is-approved');
-        btn.innerHTML = '✓ Approved';
-        btn.disabled = true;
-        btn.style.pointerEvents = 'none';
-        console.log("Dah approve!");
+        // Check kalau butang sekarang dah ada class hijau (is-approved)
+        if (btn.classList.contains('is-approved')) {
+            // Jika YA (tengah hijau), kita tukar balik jadi biru
+            btn.classList.remove('is-approved');
+            btn.innerHTML = '✓ Approve';
+            console.log("Dah cancel approve (Biru balik)");
+        } else {
+            // Jika TIDAK (tengah biru), kita tukar jadi hijau
+            btn.classList.add('is-approved');
+            btn.innerHTML = '✓ Approved';
+            console.log("Dah approve (Hijau)");
+        }
+        
+        // JANGAN letak btn.disabled = true; supaya boleh klik balik
     }
 
-    // FUNGSI BARU UNTUK BUKA/TUTUP (TOGGLE)
     function toggleRows() {
         const rows = document.querySelectorAll('.extra-row');
         const btnText = document.getElementById('btnText');
         const btnIcon = document.getElementById('btnIcon');
         
-        // Check kalau row tengah tutup (display none)
         if (rows[0].style.display === 'none') {
-            // Kita buka
             rows.forEach(row => { row.style.display = 'table-row'; });
             btnText.innerHTML = "See less";
-            btnIcon.className = "fas fa-caret-up"; // Pusing ikon ke atas
+            btnIcon.className = "fas fa-caret-up";
         } else {
-            // Kita tutup balik
             rows.forEach(row => { row.style.display = 'none'; });
             btnText.innerHTML = "See more";
-            btnIcon.className = "fas fa-caret-down"; // Pusing ikon ke bawah
+            btnIcon.className = "fas fa-caret-down";
         }
     }
     </script>

@@ -2438,21 +2438,18 @@ th.year-label:not(:last-child) {
 
   /* CSS KHAS UNTUK BUTANG APPROVE & SEE MORE */
         .btn-approve {
-            background-color: #3498db;
+            background-color: #3498db; /* Biru */
             color: white;
+            transition: background-color 0.3s ease;
             border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            padding: 5px 10px;
             cursor: pointer;
-            transition: 0.3s;
-            white-space: nowrap;
+            border-radius: 4px;
         }
 
-        /* Ini yang buat dia tukar hijau */
+        /* Warna bila dah hijau */
         .btn-approve.is-approved {
-            background-color: #2ecc71 !important;
-            color: white !important;
-            cursor: default;
+            background-color: #2ecc71 !important; /* Hijau */
         }
 
         .extra-row {

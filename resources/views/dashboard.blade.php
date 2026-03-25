@@ -10,31 +10,15 @@
 <body>
     <div class="wrapper">
         <aside class="sidebar">
-            <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+            <div class="profile-circle"><div class="profile-avatar">IZ</div></div>
             <div class="username">Iskandar</div>
-             <nav class="nav-links">
-             <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                <i class="fas fa-home"></i>Dashboard
-             </a>
-
-             <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}">
-                <i class="fas fa-history"></i>Timeline
-             </a>
-
-             <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}">
-                 <i class="fas fa-folder"></i>Projects
-             </a>
-
-             <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
-                <i class="fas fa-users"></i>Users
-             </a>
-
-             <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}">
-                <i class="fas fa-cog"></i>Settings
-             </a>
-             </nav>
+            <nav class="nav-links">
+                <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-history"></i>Timeline</a>
+                <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
+                <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
+                <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
+            </nav>
             <a href="{{ route('logout.index') }}" class="logout">Log Out</a>
         </aside>
 
@@ -42,12 +26,7 @@
             <header class="top-header">
                 <div class="header-left"><h1>All Projects</h1></div>
                 <div class="header-right">
-                    <i class="far fa-envelope" style="color:#888"></i>
-                    <i class="far fa-bell" style="color:#888"></i>
-                    <div class="search-container">
-                        <i class="fas fa-search" style="color:#ccc"></i>
-                        <input type="text" placeholder="Search">
-                    </div>
+                    <div class="search-container"><i class="fas fa-search"></i><input type="text" placeholder="Search"></div>
                     <button class="btn-create"><i class="fas fa-plus-circle"></i> Create</button>
                 </div>
             </header>
@@ -63,32 +42,46 @@
 
                     <div class="content-box">
                         <h3>Action Required</h3>
-                        <table>
+                        <table id="actionTable" style="width: 100%;">
                             @foreach(range(1,4) as $i)
                             <tr>
-                                <td style="color:#999">TS001</td>
-                                <td><i class="far fa-file-alt" style="color:#3498db"></i> Proposal.doc</td>
+                                <td style="color:#999">TS00{{$i}}</td>
+                                <td><i class="far fa-file-alt" style="color:#3498db"></i> Proposal_{{$i}}.doc</td>
                                 <td>Project 1</td>
-                               <td>
-                                    <span class="status-pending">
-                                        <i class="fas fa-eye"></i> Pending Review
-                                    </span>
-                                </td>
+                                <td><span class="status-pending"><i class="fas fa-eye"></i> Pending</span></td>
                                 <td>
-                                <div class="avatar-stack">
-                                    <div><img src="https://i.pravatar.cc/150?u=1" class="avatar-img-stack"></div>
-                                    <div><img src="https://i.pravatar.cc/150?u=2" class="avatar-img-stack"></div>
-                                     <div class="more">+2</div>
-                                </div>
+                                    <div class="avatar-stack">
+                                        <div><img src="https://i.pravatar.cc/150?u={{$i}}" class="avatar-img-stack"></div>
+                                        <div class="more">+2</div>
+                                    </div>
                                 </td>
-                                <td style="color:#999">1m ago</td>
+                                <td style="color:#999">{{$i}}m ago</td>
                                 <td class="text-red"><span class="date-fix">8 Nov 2025</span></td>
-                                <td><button class="btn-approve">✓ Approve</button></td>
+                                <td><button type="button" class="btn-approve" onclick="handleApprove(this)">✓ Approve</button></td>
+                            </tr>
+                            @endforeach
+
+                            @foreach(range(5,10) as $i)
+                            <tr class="extra-row" style="display: none;">
+                                <td style="color:#999">TS0{{$i < 10 ? '0'.$i : $i}}</td>
+                                <td><i class="far fa-file-pdf" style="color:#e74c3c"></i> Ref_Doc_{{$i}}.pdf</td>
+                                <td>Project {{ $i % 2 == 0 ? '2' : '1' }}</td>
+                                <td><span class="status-pending"><i class="fas fa-eye"></i> Pending</span></td>
+                                <td>
+                                    <div class="avatar-stack">
+                                        <div><img src="https://i.pravatar.cc/150?u={{$i+20}}" class="avatar-img-stack"></div>
+                                        <div class="more">+1</div>
+                                    </div>
+                                </td>
+                                <td style="color:#999">{{$i}}m ago</td>
+                                <td class="text-red"><span class="date-fix">12 Nov 2025</span></td>
+                                <td><button type="button" class="btn-approve" onclick="handleApprove(this)">✓ Approve</button></td>
                             </tr>
                             @endforeach
                         </table>
-                        <div style="text-align:center; color:#3498db; margin-top:15px; font-size:12px; cursor:pointer">
-                            See more <i class="fas fa-caret-down"></i>
+
+                        <div id="seeMoreBtn" onclick="toggleRows()" style="text-align:center; color:#3498db; margin-top:15px; font-size:12px; cursor:pointer">
+                            <span id="btnText">See more</span> <i id="btnIcon" class="fas fa-caret-down"></i>
                         </div>
                     </div>
 
@@ -152,18 +145,35 @@
             </div>
         </main>
     </div>
-</body>
-<style>
-    /* Ini untuk paksa tarikh lurus satu baris */
-    .date-fix {
-        white-space: nowrap !important;
-        display: inline-block;
-        min-width: 90px; /* Bagi ruang sikit supaya tak berlanggar */
+
+    <script>
+    function handleApprove(btn) {
+        btn.classList.add('is-approved');
+        btn.innerHTML = '✓ Approved';
+        btn.disabled = true;
+        btn.style.pointerEvents = 'none';
+        console.log("Dah approve!");
     }
 
-    /* Pastikan table cell tak terlalu sempit */
-    table td {
-        padding: 10px 5px;
+    // FUNGSI BARU UNTUK BUKA/TUTUP (TOGGLE)
+    function toggleRows() {
+        const rows = document.querySelectorAll('.extra-row');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        
+        // Check kalau row tengah tutup (display none)
+        if (rows[0].style.display === 'none') {
+            // Kita buka
+            rows.forEach(row => { row.style.display = 'table-row'; });
+            btnText.innerHTML = "See less";
+            btnIcon.className = "fas fa-caret-up"; // Pusing ikon ke atas
+        } else {
+            // Kita tutup balik
+            rows.forEach(row => { row.style.display = 'none'; });
+            btnText.innerHTML = "See more";
+            btnIcon.className = "fas fa-caret-down"; // Pusing ikon ke bawah
+        }
     }
-</style>
+    </script>
+</body>
 </html>

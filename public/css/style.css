@@ -1,4 +1,8 @@
-/* Font Menggunakan Sans-serif Moden */
+/*====================================================
+
+1. LAYOUT UTAMA & RESET
+
+======================================================*/
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1344,21 +1348,35 @@ td {
 
 
 /* Container & Header */
-.roles-management-wrapper { padding: 30px; }
-.section-title { color: #888; font-size: 16px; margin-bottom: 30px; }
+.roles-management-wrapper { 
+    padding: 30px; 
+}
+
+.section-title { 
+    color: #888; font-size: 16px; margin-bottom: 30px; 
+}
 
 /* Table Roles */
-.roles-table { width: 100%; border-collapse: collapse; background: #fff; }
+.roles-table { 
+    width: 100%; border-collapse: collapse; background: #fff; 
+}
+
 .roles-table th { 
     text-align: left; padding: 12px; color: #aaa; 
     font-size: 12px; font-weight: 500; 
     border-bottom: 1px solid #f0f0f0; background: #f9fbfd;
     white-space: nowrap;
 }
-.roles-table td { padding: 15px 12px; border-bottom: 1px solid #f8f8f8; font-size: 13px; }
+
+.roles-table td { 
+    padding: 15px 12px; border-bottom: 1px solid #f8f8f8; font-size: 13px; 
+}
 
 /* Role Designation (Ikon + Teks) */
-.role-designation { display: flex; align-items: center; gap: 12px; }
+.role-designation { 
+    display: flex; align-items: center; gap: 12px; 
+}
+
 .role-icon-circle {
     width: 32px; height: 32px;
     background: #e0f0ff; color: #7dbfff; /* Biru pudar ikut gambar */
@@ -1368,8 +1386,13 @@ td {
 }
 
 /* Tarikh & Teks Kelabu */
-.text-muted { color: #bbb; }
-.text-date { color: #888; white-space: nowrap; }
+.text-muted { 
+    color: #bbb; 
+}
+
+.text-date { 
+    color: #888; white-space: nowrap; 
+}
 
 /* Actions & Dropdown (Sama 100% macam gambar) */
 /* Sembunyikan dropdown secara default */
@@ -1399,11 +1422,21 @@ td {
     display: block; padding: 10px 20px;
     color: #666; text-decoration: none; font-size: 12px;
 }
-.action-dropdown a:hover { background: #f8f9fa; }
-.text-danger { color: #e74c3c !important; }
-.text-danger i { margin-right: 5px; }
+.action-dropdown a:hover { 
+    background: #f8f9fa; 
+}
 
-.permissions-wrapper { padding: 30px; }
+.text-danger { 
+    color: #e74c3c !important; 
+}
+
+.text-danger i { 
+    margin-right: 5px; 
+}
+
+.permissions-wrapper {
+     padding: 30px; 
+}
 .section-title { color: #888; font-size: 16px; margin-bottom: 30px; font-weight: 600; }
 
 .permissions-table-container { background: #fff; width: 100%; }
@@ -2267,3 +2300,177 @@ input[type="checkbox"] {
     background-color: #f0f0f0;
 }
 
+.year-header {
+    background-color: #f8f9fc; /* Warna latar belakang lembut */
+}
+
+.year-label {
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #3d2c51; /* Warna ungu tema sidebar anda */
+    padding: 10px 0;
+    border-bottom: 1px solid #e3e6f0;
+    letter-spacing: 1px;
+}
+
+/* Garisan menegak untuk memisahkan antara tahun 2025 dan 2026 */
+th.year-label:not(:last-child) {
+    border-right: 2px solid #d1d3e2;
+}
+
+/* Container utama untuk membolehkan scroll */
+.timeline-container {
+    width: 100%;
+    overflow: hidden; /* Elakkan scrollbar luar muncul */
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.timeline-scroll-wrapper {
+    overflow-x: auto; /* Membolehkan scroll ke kiri/kanan */
+    max-width: 100%;
+}
+
+.timeline-table {
+    border-collapse: collapse;
+    min-width: 5000px; /* Paksa jadual jadi panjang supaya boleh scroll */
+    table-layout: fixed;
+}
+
+/* Membuatkan kolum ID & Task melekat di kiri semasa scroll */
+.sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background-color: white !important;
+    border-right: 2px solid #eee !important;
+}
+
+/* Kolum Task perlu diletakkan selepas ID */
+.col-task.sticky-col {
+    left: 50px; /* Berdasarkan lebar col-id */
+    z-index: 11;
+}
+
+/* Gaya Header Tahun */
+.year-label {
+    background-color: #3d2c51;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #503c6a;
+}
+
+.month-header th {
+    background-color: #f1f5f9;
+    font-size: 11px;
+    border: 1px solid #e2e8f0;
+    min-width: 120px; /* Lebar satu bulan */
+}
+
+.week-header th {
+    font-size: 9px;
+    min-width: 30px; /* Lebar satu minggu */
+    color: #94a3b8;
+}
+
+/* =========================================
+   Gaya Bar Warna Pepejal (Rata & Ringkas)
+   ========================================= */
+
+/* Gaya Asas Bar (Tanpa Shiny/Gradient) */
+.timeline-bar {
+    height: 24px;
+    border-radius: 4px; /* Kekalkan bucu bulat sedikit */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Warna teks putih */
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    padding: 0 10px;
+    /* Box-shadow dibuang untuk rupa flat */
+}
+
+/* --- Variasi Warna Pepejal (Solid Colors) --- */
+
+/* Biru Rata (Macam rujukan tapi solid) */
+.blue-bar {
+    background-color: #a0d8f1; /* Warna biru cair pepejal */
+    color: #333; /* Teks gelap sikit supaya jelas */
+}
+
+/* Jingga Rata */
+.orange-bar {
+    background-color: #ff9f43;
+}
+
+/* Hijau Rata */
+.green-bar {
+    background-color: #2ecc71;
+}
+
+/* Merah Rata (Untuk data dummy baru) */
+.red-bar {
+    background-color: #e74c3c;
+}
+
+/* Ungu Rata (Untuk data dummy baru) */
+.purple-bar {
+    background-color: #9b59b6;
+}
+
+/* Kelabu Rata (Kekal sama) */
+.grey-bar {
+    background-color: #bdc3c7;
+}
+
+/* Tambahan: Pastikan teks dalam bar sentiasa di tengah */
+.timeline-cell {
+    padding: 5px 0 !important;
+    position: relative;
+    vertical-align: middle;
+}
+
+  /* CSS KHAS UNTUK BUTANG APPROVE & SEE MORE */
+        .btn-approve {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        /* Ini yang buat dia tukar hijau */
+        .btn-approve.is-approved {
+            background-color: #2ecc71 !important;
+            color: white !important;
+            cursor: default;
+        }
+
+        .extra-row {
+            border-top: 1px solid #eee;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .date-fix {
+            white-space: nowrap !important;
+            display: inline-block;
+            min-width: 90px;
+        }
+
+    table td {
+        padding: 10px 5px;
+    }

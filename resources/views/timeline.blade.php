@@ -61,50 +61,39 @@
                 <h3><i class="fas fa-briefcase text-blue"></i> Project 1 - Office Reno <i class="fas fa-caret-down"></i></h3>
             </div>
 
-            <div class="timeline-container">
-                <table class="timeline-table">
-                    <thead>
-                        <tr class="month-header">
-                            <th rowspan="2" class="col-id">ID</th>
-                            <th rowspan="2" class="col-task">Task <i class="fas fa-caret-down"></i></th>
-                            <th colspan="4">October</th>
-                            <th colspan="4">November</th>
-                            <th colspan="4">December</th>
-                            <th colspan="4">January</th>
-                        </tr>
-                        <tr class="week-header">
-                            @for ($i = 0; $i < 4; $i++)
-                                <th>Wk 1</th><th>Wk 2</th><th>Wk 3</th><th>Wk 4</th>
-                            @endfor
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="row-main">
-                            <td>FD001</td>
-                            <td><i class="fas fa-briefcase text-blue"></i> Project 1 - Office Reno</td>
-                            @for ($i = 0; $i < 16; $i++) <td></td> @endfor
-                        </tr>
-                        <tr class="row-sub">
-                            <td>TS001</td>
-                            <td class="pl-20"><i class="fas fa-file-alt text-blue"></i> Task 1 (Proposal)</td>
-                            <td colspan="16" class="timeline-cell">
-                                <div class="timeline-bar blue-bar" style="width: 40%; margin-left: 25%;">
-                                    On-going 20%
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="row-sub">
-                            <td>TS001</td>
-                            <td class="pl-20"><i class="fas fa-file-alt text-blue"></i> Task 2 (Interior Design)</td>
-                            <td colspan="16" class="timeline-cell">
-                                <div class="timeline-bar grey-bar" style="width: 15%; margin-left: 55%;">
-                                    On Hold
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+           <div class="timeline-container">
+    <div class="timeline-scroll-wrapper">
+        <table class="timeline-table">
+            <thead>
+                <tr class="year-header">
+                    <th rowspan="3" class="col-id sticky-col">ID</th>
+                    <th rowspan="3" class="col-task sticky-col">Task <i class="fas fa-caret-down"></i></th>
+                    @foreach(['2025', '2026', '2027'] as $year)
+                        <th colspan="48" class="year-label">{{ $year }}</th> @endforeach
+                </tr>
+
+                <tr class="month-header">
+                    @foreach(['2025', '2026', '2027'] as $year)
+                        @foreach(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+                            <th colspan="4">{{ $month }}</th>
+                        @endforeach
+                    @endforeach
+                </tr>
+
+                <tr class="week-header">
+                    @for ($i = 0; $i < (3 * 12); $i++) <th>1</th><th>2</th><th>3</th><th>4</th>
+                    @endfor
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row-main">
+                    <td class="sticky-col">FD001</td>
+                    <td class="sticky-col"><i class="fas fa-briefcase text-blue"></i> Project 1 - Office Reno</td>
+                    @for ($i = 0; $i < 144; $i++) <td></td> @endfor </tr>
+                </tbody>
+        </table>
+    </div>
+</div>
         </main>
     </div>
 </body>

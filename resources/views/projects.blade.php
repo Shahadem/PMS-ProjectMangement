@@ -72,15 +72,16 @@
                             <td></td><td></td><td>1m ago</td><td>1 March 2027</td><td>...</td>
                             <td><a href="#" class="timeline-link"><i class="far fa-clock"></i> Timeline View</a></td>
                         </tr>
-                        @foreach(['On-going' => '20%', 'On-going' => '20%', 'On-going' => '20%'] as $status => $per)
+                        @foreach(['On-going' => '20%'] as $status => $per)
                         <tr class="row-sub">
                             <td>TS001</td>
-                            <td class="pl-30"><i class="fas fa-file-alt text-blue"></i> Task (Example)</td>
+                            <td class="pl-30">
+                                <a href="{{ route('projects.task.show', ['name' => 'Task (Example)']) }}" style="text-decoration: none; color: inherit;">
+                                    <i class="fas fa-file-alt text-blue"></i> Task (Example)
+                                </a>
+                            </td>
                             <td><div class="prog-badge badge-blue"><span>{{$status}}</span> <span>{{$per}}</span></div></td>
-                            <td><div class="owner"><i class="fas fa-user-circle"></i> Iskandar Z</div></td>
-                            <td>1m ago</td><td class="text-red">1 March 2027</td><td>...</td>
-                            <td><a href="#" class="timeline-link"><i class="far fa-clock"></i> Timeline View</a></td>
-                        </tr>
+                            </tr>
                         @endforeach
 
                         <tr class="row-main">

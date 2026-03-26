@@ -67,3 +67,9 @@ Route::get('/deleteaccount', function () {
 Route::get('/security', function () {
     return view('security');
 })->name('security.index');
+
+
+//Route untuk task_show
+Route::get('/projects/task/{name}', function ($name) {
+    return view('task_show', ['task_name' => $name]);
+})->name('projects.task.show');

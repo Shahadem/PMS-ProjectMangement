@@ -61,38 +61,63 @@
                 <h3><i class="fas fa-briefcase text-blue"></i> Project 1 - Office Reno <i class="fas fa-caret-down"></i></h3>
             </div>
 
-           <div class="timeline-container">
-    <div class="timeline-scroll-wrapper">
-        <table class="timeline-table">
-            <thead>
-                <tr class="year-header">
-                    <th rowspan="3" class="col-id sticky-col">ID</th>
-                    <th rowspan="3" class="col-task sticky-col">Task <i class="fas fa-caret-down"></i></th>
-                    @foreach(['2025', '2026', '2027'] as $year)
-                        <th colspan="48" class="year-label">{{ $year }}</th> @endforeach
-                </tr>
-
-                <tr class="month-header">
-                    @foreach(['2025', '2026', '2027'] as $year)
-                        @foreach(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
-                            <th colspan="4">{{ $month }}</th>
-                        @endforeach
+<div class="timeline-container">
+    <table class="timeline-table">
+        <thead>
+            <tr class="year-header">
+                <th rowspan="3" class="col-id">ID</th>
+                <th rowspan="3" class="col-task">Task <i class="fas fa-caret-down"></i></th>
+                @foreach (['2025', '2026', '2027'] as $year)
+                <th colspan="48" class="year-th">
+                    <div class="sticky-year-wrapper">
+                        <span class="sticky-year">{{ $year }}</span>
+                    </div>
+                </th>
+                @endforeach
+            </tr>
+            </tr>
+            <tr class="month-header">
+                @foreach (['2025', '2026', '2027'] as $year)
+                    @foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+                        <th colspan="4">{{ $month }}</th>
                     @endforeach
-                </tr>
+                @endforeach
+            </tr>
+            <tr class="week-header">
+                @for ($i = 0; $i < 36; $i++) <th>W1</th><th>W2</th><th>W3</th><th>W4</th>
+                @endfor
+            </tr>
+        </thead>
+        <tbody>
+            @php $totalWeeks = 3 * 12 * 4; @endphp <tr class="row-main">
+                <td class="col-id">FD001</td>
+                <td class="col-task"><b><i class="fas fa-briefcase text-blue"></i> Project 1 - Office Reno</b></td>
+                @for ($i = 0; $i < $totalWeeks; $i++) <td></td> @endfor
+            </tr>
 
-                <tr class="week-header">
-                    @for ($i = 0; $i < (3 * 12); $i++) <th>1</th><th>2</th><th>3</th><th>4</th>
-                    @endfor
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="row-main">
-                    <td class="sticky-col">FD001</td>
-                    <td class="sticky-col"><i class="fas fa-briefcase text-blue"></i> Project 1 - Office Reno</td>
-                    @for ($i = 0; $i < 144; $i++) <td></td> @endfor </tr>
-                </tbody>
-        </table>
-    </div>
+            <tr class="row-sub">
+                <td class="col-id">TS001</td>
+                <td class="col-task" style="padding-left: 30px;"><i class="fas fa-file-alt text-blue"></i> Task 1 (Proposal)</td>
+                <td colspan="{{ $totalWeeks }}" class="timeline-cell">
+                    <div class="timeline-bar blue-bar" style="width: 400px; margin-left: 0px;">
+                        On-going 20%
+                    </div>
+                </td>
+            </tr>
+
+            @for ($j = 2; $j <= 20; $j++)
+            <tr class="row-sub">
+                <td class="col-id">TS0{{ $j }}</td>
+                <td class="col-task" style="padding-left: 30px;"><i class="fas fa-file-alt text-blue"></i> Extra Task {{ $j }}</td>
+                <td colspan="{{ $totalWeeks }}" class="timeline-cell">
+                    <div class="timeline-bar grey-bar" style="width: 200px; margin-left: {{ $j * 100 }}px;">
+                        On Hold 
+                    </div>
+                </td>
+            </tr>
+            @endfor
+        </tbody>
+    </table>
 </div>
         </main>
     </div>

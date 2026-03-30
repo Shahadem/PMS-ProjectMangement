@@ -39,6 +39,8 @@
             <header class="top-header">
                 <div class="header-left"><h1>All Projects</h1></div>
                 <div class="header-right">
+                    <i class="far fa-envelope"></i>
+                    <i class="far fa-bell"></i>
                     <div class="search-container">
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search">

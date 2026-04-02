@@ -7,6 +7,83 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+<style>
+/* 1. Container Utama */
+.timeline-container {
+    width: 100%;
+    /* Gunakan vh (viewport height) untuk tarik container ke bawah skrin */
+    /* Kita tolak 150px (anggaran tinggi header & breadcrumb anda) */
+    height: calc(100vh - 150px); 
+    
+    overflow-x: auto;
+    overflow-y: auto; /* Ini membolehkan body jadual diskrol ke bawah */
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Table Settings */
+..timeline-table {
+    border-collapse: collapse;
+    width: max-content;
+    min-height: 100%; /* Paksa table memanjang ke bawah container */
+    font-size: 12px;
+}
+
+
+
+/* Header Tahun, Bulan, Minggu */
+.timeline-table th {
+    padding: 4px 8px; /* Kecilkan padding */
+    border: 1px solid #eee;
+    background-color: #f8f9fa;
+    white-space: nowrap;
+}
+
+/* Kecilkan lebar kolum Minggu (W1, W2...) */
+.week-header th {
+    min-width: 30px; /* Lebar minimum setiap minggu */
+    font-size: 10px;
+    color: #888;
+}
+
+/* 3. Kemaskan Kolum ID dan Task */
+.col-id, .col-task {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 10;
+    /* Guna box-shadow sebagai pengganti border supaya tak hilang bila scroll */
+    box-shadow: inset -2px 0 0 0 #ddd; 
+    border-right: none !important; 
+}
+
+.col-task {
+    left: 50px; /* Pastikan ini sama dengan lebar .col-id */
+    min-width: 200px;
+    /* Tambah shadow sikit supaya nampak pemisah antara task & timeline area */
+    box-shadow: inset -2px 0 0 0 #ddd;
+}
+
+/* 4. Kecilkan Bar Timeline */
+.timeline-bar {
+    height: 20px; /* Nipiskan sikit bar */
+    line-height: 20px;
+    font-size: 10px;
+    border-radius: 4px;
+    padding: 0 10px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+/* Row Sub-task bagi rapat sikit */
+.row-sub td {
+    padding: 2px 8px; /* Rapatkan jarak antara row */
+    height: 35px;
+}
+</style>
 <body>
     <div class="wrapper">
         <aside class="sidebar">

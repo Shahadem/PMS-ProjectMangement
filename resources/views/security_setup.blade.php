@@ -7,6 +7,153 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 </head>
+<style>
+      /* ─── CONTENT AREA ─── */
+  .content-area {
+    flex: 1;
+    padding: 32px 40px;
+    background:;
+    overflow-y: auto;
+  }
+ 
+  /* ─── 2FA CARD ─── */
+  .twofa-card {
+    background: #fff;
+    border: 0px solid #e8e8ef;
+    border-radius: 14px;
+    padding: 32px 36px 28px;
+    max-width: 580px;
+  }
+ 
+  /* Back header */
+  .card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 0px solid #f0f0f5;
+  }
+ 
+  .back-btn {
+    width: 30px; height: 30px;
+    background: none; border: none; cursor: pointer;
+    border-radius: 7px; color: #555;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .back-btn:hover { background: #f3f3f7; }
+  .back-btn svg { width: 17px; height: 17px; }
+ 
+  .card-header h2 {
+    font-size: 15px; font-weight: 700; color: #18181b;
+    letter-spacing: -0.2px;
+  }
+ 
+  /* Intro block */
+  .intro-block { margin-bottom: 22px; }
+  .intro-block .intro-label {
+    font-size: 13.5px; font-weight: 700; color: #18181b; margin-bottom: 3px;
+  }
+  .intro-block .intro-desc { font-size: 12.5px; color: #6b7280; line-height: 1.5; }
+ 
+  /* Step rows */
+  .step { margin-bottom: 22px; }
+  .step:last-child { margin-bottom: 0; }
+ 
+  .step-title {
+    font-size: 13px; font-weight: 700; color: #18181b; margin-bottom: 4px;
+  }
+  .step-desc { font-size: 12.5px; color: #6b7280; line-height: 1.5; }
+ 
+  /* QR section */
+  .qr-section { margin-top: 12px; }
+
+  .qrimage {
+    width: 106px;
+    height: 104px;
+    top: 372px;
+    left: 349px;
+  }
+ 
+  .qr-img-box {
+    width: 100px; height: 100px;
+    border: 0px solid #dde1ea; border-radius: 8px;
+    overflow: hidden; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+ 
+  .qr-img-box svg { width: 86px; height: 86px; }
+ 
+  .manual-label {
+    font-size: 12px; color: #6b7280; margin-bottom: 7px;
+  }
+ 
+  .manual-key-box {
+    background: #ede8f7;
+    border-radius: 0px;
+    padding: 11px 16px;
+    display: inline-block;
+    min-width: 240px;
+  }
+  .manual-key-box span {
+    font-family: 'inheritan';
+    font-size: 16px; font-weight: 700;
+    color: #626262; letter-spacing: 1.5px;
+  }
+ 
+  /* OTP input */
+  .otp-input {
+    margin-top: 10px;
+    width: 100%; max-width: 280px;
+    height: 42px;
+    border: 1.5px solid #dde1ea;
+    border-radius: 8px;
+    padding: 0 13px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #18181b; background: #fafafa; outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .otp-input::placeholder { color: #b5b5c3; }
+  .otp-input:focus { border-color: #4d7cf6; background: #fff; }
+ 
+  /* Footer */
+  .card-footer {
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 50px;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 0px solid #f0f0f5;
+  }
+ 
+  .btn-cancel {
+    background: none; 
+    border: none;
+    font-family: inherit; 
+    font-size: 13.5px; 
+    font-weight: 500;
+    color: #6b7280; 
+    cursor: pointer;
+    padding: 9px 12px; 
+    border-radius: 8px; 
+    transition: color 0.15s;
+}
+
+  .btn-cancel:hover { color: #18181b; }
+ 
+  .btn-verify {
+    width: 147px;
+    background: #2A9FFF; border: none;
+    border-radius: 7.99px; padding: 11px 30px;
+    font-family: inherit; font-size: 13.5px; font-weight: 700;
+    color: #fff; cursor: pointer;
+    box-shadow: 0 3px 10px rgba(77,124,246,0.28);
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-verify:hover { background: #3a6ae8; }
+  .btn-verify:active { transform: scale(0.98); }
+</style>
 <body>
     <div class="wrapper">
         <aside class="sidebar">
@@ -46,62 +193,67 @@
         <a href="{{ route('deleteaccount.index') }}" class="sub-nav-item">Account</a>    
     </nav>
 
-   <div class="p-security-container" style="max-width: 620px; margin: 40px auto; text-align: center; padding: 20px; font-family: 'Inter', -apple-system, sans-serif;">
-    <div style="width: 72px; height: 72px; background: #EBF8FF; color: #3182CE; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 32px;">
-        <i class="fas fa-mobile-alt"></i>
-    </div>
-
-    <h2 style="font-size: 26px; font-weight: 800; color: #1A202C; margin-bottom: 8px; letter-spacing: -0.5px;">Set up mobile app authenticator</h2>
-    <p style="color: #718096; font-size: 15px; margin-bottom: 32px;">To use a mobile app for 2FA, please follow these steps:</p>
-
-    <div style="text-align: left; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 35px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); margin-bottom: 28px;">
-        
-        <div style="display: flex; gap: 20px; margin-bottom: 32px;">
-            <div style="min-width: 28px; height: 28px; background: #3182CE; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">1</div>
-            <div>
-                <p style="margin: 0; font-weight: 700; color: #2D3748; font-size: 16px;">Install an authenticator app</p>
-                <p style="margin: 4px 0 0; font-size: 14px; color: #718096; line-height: 1.6;">Download Google Authenticator or Authy from the App Store or Play Store.</p>
+    <!-- Content -->
+    <div class="content-area">
+ 
+      <div class="twofa-card">
+ 
+        <!-- Card Header -->
+        <div class="card-header">
+          <button class="back-btn" aria-label="Back">
+            <a href="/security">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            </a>
+          </button>
+          <h2>Set Two-Factor authentication</h2>
+        </div>
+ 
+        <!-- Intro -->
+        <div class="intro-block">
+          <p class="intro-label">Mobile app authenticator setup</p>
+          <p class="intro-desc">Use a mobile app like Google Authenticator to generate verification codes.</p>
+        </div>
+ 
+        <!-- Step 1 -->
+        <div class="step">
+          <p class="step-title">1. Download App</p>
+          <p class="step-desc">Use a mobile app like Google Authenticator to generate verification codes.</p>
+        </div>
+ 
+        <!-- Step 2 -->
+        <div class="step">
+          <p class="step-title">2. Scan QR code</p>
+          <p class="step-desc">Scan this QR code using the app.</p>
+ 
+          <div class="qr-section">
+            <!-- QR Code SVG -->
+              <img class="qrimage" src="{{ asset('css/image/qrcode.png') }}" alt="">
+            <p class="manual-label">Can't scan QR code? Enter the code manually in the app.</p>
+            <div class="manual-key-box">
+            <center>
+              <span>NZUK-7MP2-H6HJ-APLV</span>
+            </center>
             </div>
+          </div>
+        </div>
+ 
+        <!-- Step 3 -->
+        <div class="step">
+          <p class="step-title">3. Finish setup</p>
+          <p class="step-desc">Enter the verification code generated by your app.</p>
+          <input class="otp-input" type="text" inputmode="numeric" placeholder="Enter OTP"
+                 maxlength="6" autocomplete="one-time-code">
+        </div>
+ 
+        <!-- Footer -->
+        <div class="card-footer">
+          <button class="btn-cancel">Cancel</button>
+          <button class="btn-verify">Verify</button>
         </div>
 
-        <div style="display: flex; gap: 20px; margin-bottom: 32px;">
-            <div style="min-width: 28px; height: 28px; background: #3182CE; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">2</div>
-            <div style="flex: 1;">
-                <p style="margin: 0; font-weight: 700; color: #2D3748; font-size: 16px; margin-bottom: 16px;">Scan the QR code</p>
-                <div style="display: flex; align-items: center; gap: 24px; background: #F8FAFC; padding: 24px; border-radius: 12px; border: 1px solid #EDF2F7;">
-                    <div style="width: 130px; height: 130px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px;">
-                        <i class="fas fa-qrcode" style="font-size: 110px; color: #1A202C;"></i>
-                    </div>
-                    <div style="flex: 1;">
-                        <p style="margin: 0; font-size: 13px; color: #718096; margin-bottom: 10px;">Can't scan the code? Enter this key manually:</p>
-                        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 10px 14px; border-radius: 8px; display: block; text-align: center;">
-                            <span style="font-family: 'SFMono-Regular', Consolas, monospace; font-size: 15px; font-weight: 700; color: #3182CE; letter-spacing: 1px;">JBSW Y3DP EHPX S33T</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div style="display: flex; gap: 20px;">
-            <div style="min-width: 28px; height: 28px; background: #3182CE; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">3</div>
-            <div style="flex: 1;">
-                <p style="margin: 0; font-weight: 700; color: #2D3748; font-size: 16px; margin-bottom: 16px;">Enter verification code</p>
-                <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
-                    <input type="text" maxlength="1" style="width: 46px; height: 54px; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 22px; font-weight: 700; color: #2D3748; outline: none; background: #F9FAFB;" onfocus="this.style.borderColor='#3182CE'; this.style.background='#fff';">
-                    <input type="text" maxlength="1" style="width: 46px; height: 54px; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 22px; font-weight: 700; color: #2D3748; outline: none; background: #F9FAFB;" onfocus="this.style.borderColor='#3182CE'; this.style.background='#fff';">
-                    <input type="text" maxlength="1" style="width: 46px; height: 54px; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 22px; font-weight: 700; color: #2D3748; outline: none; background: #F9FAFB;" onfocus="this.style.borderColor='#3182CE'; this.style.background='#fff';">
-                    <div style="width: 14px; height: 2px; background: #CBD5E0; margin: 0 4px;"></div>
-                    <input type="text" maxlength="1" style="width: 46px; height: 54px; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 22px; font-weight: 700; color: #2D3748; outline: none; background: #F9FAFB;" onfocus="this.style.borderColor='#3182CE'; this.style.background='#fff';">
-                    <input type="text" maxlength="1" style="width: 46px; height: 54px; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 22px; font-weight: 700; color: #2D3748; outline: none; background: #F9FAFB;" onfocus="this.style.borderColor='#3182CE'; this.style.background='#fff';">
-                    <input type="text" maxlength="1" style="width: 46px; height: 54px; text-align: center; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 22px; font-weight: 700; color: #2D3748; outline: none; background: #F9FAFB;" onfocus="this.style.borderColor='#3182CE'; this.style.background='#fff';">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div style="display: flex; gap: 15px; padding: 0 5px;">
-        <button type="button" style="flex: 1; padding: 15px; background: #FFFFFF; color: #4A5568; border: 1px solid #E2E8F0; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer;">Cancel</button>
-        <button type="button" style="flex: 2; padding: 15px; background: #3182CE; color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 4px 14px rgba(49, 130, 206, 0.3);">Verify and Activate</button>
-    </div>
-</div>
-</body>
+        </div><!-- /twofa-card -->
+ 
+    </div><!-- /content-area -->

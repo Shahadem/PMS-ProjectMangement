@@ -36,7 +36,7 @@
 
                 <div class="login-options">
                     <label><input type="checkbox"> Remember me</label>
-                    <a href="#">Forgot Password?</a>
+                    <a href="/forgotpassword">Forgot Password?</a>
                 </div>
 
                 <button type="submit" class="btn-login">Sign In</button>

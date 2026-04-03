@@ -16,12 +16,12 @@
             <div class="username">Iskandar</div>
             <nav class="nav-links">
                 <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
-                <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-history"></i>Timeline</a>
+                <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="{{ route('logout.index') }}" class="logout">Log Out</a>
+            <a href="/" class="logout">Log Out</a>
         </aside>
 
 
@@ -455,7 +455,7 @@
         let formattedDeadline = 'No Date';
         if (deadlineValue) {
             const dateObj = new Date(deadlineValue);
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
             // Menukar 2026-03-30 -> 30 March 2026
             formattedDeadline = dateObj.toLocaleDateString('en-GB', options);
         }

@@ -18,7 +18,7 @@ body {
 /* Sidebar: Warna Ungu Gelap */
 .sidebar {
     width: 90px;
-    background-color: #3d2c51;
+    background-color: #3C2F4C;
     color: #a291b5;
     display: flex;
     flex-direction: column;
@@ -70,9 +70,8 @@ body {
 
 /* CSS Highlight */
 .nav-item.active {
-    background-color: rgba(255, 255, 255, 0.1); /* Warna highlight malap */
-    border-left: 4px solid #fff; /* Garisan putih di tepi */
     font-weight: bold;
+    color: #fff; /* ← make icon & label white when active */
 }
 
 .logout {
@@ -2195,7 +2194,7 @@ input[type="checkbox"] {
 
 /* Butang Continue */
 .p-btn-continue {
-    background-color: #3498db; /* Biru sebiji macam rujukan */
+    background-color: #3498db;
     color: white;
     border: none;
     padding: 12px 40px;
@@ -2204,7 +2203,7 @@ input[type="checkbox"] {
     font-weight: 600;
     cursor: pointer;
     display: block;
-    margin: 0 auto; /* Letak butang kat tengah */
+    margin-left: auto; /* ← changed from margin: 0 auto */
 }
 
 .p-btn-continue:hover {
@@ -2338,36 +2337,62 @@ th.year-label:not(:last-child) {
 /* Container utama */
 .timeline-container {
     width: 100%;
-    overflow: auto;
-    max-height: 80vh;
-    border: 1px solid #e0e0e0;
+    /* Gunakan vh (viewport height) supaya dia ikut tinggi skrin */
+    max-height: 80vh; 
+    overflow-y: auto;  /* Scroll vertical kalau task banyak */
+    overflow-x: auto;  /* Kekalkan scroll horizontal */
+    border: 1px solid #ddd;
+    background: #fff;
+    position: relative;
 }
 
+/* Pastikan table tak mampat */
 .timeline-table {
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed;
-    width: max-content;
+    width: max-content; /* Biar lebar ikut jumlah minggu */
+}
+
+/* Tambahan: Pastikan baris sub-task nampak nipis & kemas */
+.row-sub td {
+    height: 35px !important;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.timeline-table td {
+    padding: 5px 2px !important; /* Nipiskan padding baris dalam table */
+    height: 35px;
 }
 
 /* Ketinggian sticky yang berbeza untuk setiap lapisan */
+/* 1. Baris Tahun (Tinggi asal 35px) */
 .year-header th {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20; /* Paling atas */
+    height: 35px; 
     background: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-    font-size: 16px;
-    padding: 10px;
 }
 
+/* 2. Baris Bulan  */
 .month-header th {
     position: sticky;
-    top: 45px; /* Lepas baris tahun */
+    top: 35px; /* Ngam-ngam bawah Tahun yang tingginya 35px */
     z-index: 10;
     background: #ffffff;
     border-bottom: 1px solid #eee;
     font-size: 13px;
+    height: 30px; /* Kita tetapkan tinggi supaya senang kira untuk baris seterusnya */
+}
+
+/* 3. Baris Minggu (Naikkan ke 65px) */
+.week-header th {
+    position: sticky;
+    top: 65px; /* Hasil tambah Tahun(35px) + Bulan(30px) */
+    z-index: 10;
+    background: #f1f4f9;
+    font-size: 10px;
+    height: 25px;
 }
 
 /* Penetapan Lebar Kolum */
@@ -2379,6 +2404,15 @@ th.year-label:not(:last-child) {
     background: white;
     width: 80px;
     border-right: 1px solid #ddd;
+    height: 35px;
+}
+
+.col-id, .col-task {
+    /* Rowspan="3" akan buat tinggi dia jadi 25+25+20 = 70px total */
+    /* Kita paksa teks duduk tengah dan buang padding melampau */
+    vertical-align: middle !important;
+    padding: 0 5px !important;
+    background: white;
 }
 
 .col-task, .timeline-table td:nth-child(2) {
@@ -2389,6 +2423,22 @@ th.year-label:not(:last-child) {
     width: 280px;
     border-right: 3px solid #3498db;
     white-space: nowrap;
+}
+
+.col-task {
+    position: sticky;
+    left: 45px; /* Ikut lebar ID baru */
+    z-index: 40;
+    background: white;
+    width: 100px !important; /* Nipiskan dari 220px ke 160px */
+    min-width: 160px;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Biar dia potong teks kalau panjang */
+    padding-left: 8px !important;
+    border-right: 2px solid #3498db;
+    
 }
 
 /* Kolum Minggu */
@@ -2468,11 +2518,11 @@ th.year-label:not(:last-child) {
 .sticky-year-wrapper {
     position: sticky;
     left: 360px; /* Lebar ID(80px) + Task(280px) */
-    width: calc(100vw - 360px - 40px); /* Lebar skrin tolak kolum tetap & padding */
+    width: calc(100vw - 360px - 40px); 
     display: flex;
-    justify-content: center; /* Ini yang buat dia stay kat tengah */
+    justify-content: center; 
     align-items: center;
-    height: 50px;
+    height: 30px;
     pointer-events: none; /* Supaya tak kacau klik pada table */
 }
 
@@ -2482,7 +2532,7 @@ th.year-label:not(:last-child) {
     font-weight: bold;
     color: #2c3e50;
     background: #f8f9fa;
-    padding: 5px 15px;
+    padding: 1px 10px;
     pointer-events: auto;
 }
 
@@ -2502,15 +2552,17 @@ th.year-label:not(:last-child) {
 /* --- Layer Bulan & Minggu --- */
 .month-header th {
     position: sticky;
-    top: 50px;
-    z-index: 9;
-    background: #fff;
+    top: 35px; /* Ngam-ngam bawah Tahun yang tingginya 35px */
+    z-index: 10;
+    background: #ffffff;
     border-bottom: 1px solid #eee;
+    font-size: 13px;
+    height: 30px; /* Kita tetapkan tinggi supaya senang kira untuk baris seterusnya */
 }
 
 .week-header th {
     position: sticky;
-    top: 90px;
+    top: 10px;
     z-index: 9;
     background: #f1f4f9;
 }
@@ -2579,39 +2631,296 @@ th.year-label:not(:last-child) {
         .avatar-group { display: flex; align-items: center; }
         .avatar-group img { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; margin-left: -8px; }
         .avatar-group img:first-child { margin-left: 0; }
-        .avatar-count { background: #edf2f7; color: #718096; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; margin-left: -8px; border: 2px solid #fff; }
-        .avatar-add { width: 28px; height: 28px; border-radius: 50%; border: 1px dashed #cbd5e0; display: flex; align-items: center; justify-content: center; color: #a0aec0; margin-left: 5px; font-size: 12px; }
+        .avatar-count { 
+            background: #edf2f7; 
+            color: #718096; 
+            width: 28px; 
+            height: 28px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 10px; 
+            margin-left: -8px; 
+            border: 2px solid #fff; 
+        }
+        .avatar-add { 
+            width: 28px; 
+            height: 28px; 
+            border-radius: 50%; 
+            border: 1px dashed #cbd5e0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #a0aec0; 
+            margin-left: 5px; 
+            font-size: 12px; 
+        }
 
         /* Sidebar Kanan (Task Overview) */
-        .right-sidebar { border-left: 1px solid #edf2f7; padding-left: 20px; }
-        .task-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .task-item { display: grid; grid-template-columns: 24px 120px 1fr; align-items: center; margin-bottom: 18px; font-size: 13px; }
-        .task-item i { color: #a0aec0; }
-        .task-item span { color: #718096; }
-        .task-item b { color: #2d3748; text-align: right; }
+        .right-sidebar { 
+            border-left: 1px solid #edf2f7; 
+            padding-left: 20px; 
+        }
+        .task-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+        }
+        .task-item { 
+            display: grid; 
+            grid-template-columns: 24px 120px 1fr; 
+            align-items: center; 
+            margin-bottom: 18px; 
+            font-size: 13px; 
+        }
+        .task-item i { 
+            color: #a0aec0; 
+        }
+        .task-item span { 
+            color: #718096; 
+        }
+        .task-item b { 
+            color: #2d3748; 
+            text-align: right; 
+        }
 
         /* Progress Bar */
-        .progress-wrapper { grid-column: 2 / 4; margin-top: 10px; }
-        .progress-container { background: #edf2f7; height: 6px; border-radius: 10px; width: 100%; overflow: hidden; }
-        .progress-bar { background: #3182ce; width: 20%; height: 100%; border-radius: 10px; }
+        .progress-wrapper { 
+            grid-column: 2 / 4; 
+            margin-top: 10px; 
+        }
+        .progress-container { 
+            background: #edf2f7; 
+            height: 6px; 
+            border-radius: 10px; 
+            width: 100%; 
+            overflow: hidden; 
+        }
+        .progress-bar { 
+            background: #3182ce; 
+            width: 20%; 
+            height: 100%; 
+            border-radius: 10px; 
+        }
 
         /* Tabs */
-        .comment-tabs { display: flex; border-bottom: 1px solid #edf2f7; margin-top: 30px; margin-bottom: 20px; }
-        .tab-item { padding: 10px 20px; font-size: 14px; color: #a0aec0; cursor: pointer; position: relative; }
-        .tab-item.active { color: #3182ce; font-weight: 600; }
-        .tab-item.active::after { 
-            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: #3182ce; 
+        .comment-tabs { 
+            display: flex; 
+            border-bottom: 1px solid #edf2f7; 
+            margin-top: 30px; 
+            margin-bottom: 20px; }
+        .tab-item { 
+            padding: 10px 20px; 
+            font-size: 14px; 
+            color: #a0aec0; 
+            cursor: pointer; 
+            position: relative; }
+        .tab-item.active { 
+            color: #3182ce; 
+            font-weight: 600; 
         }
-        .tab-item .dot { color: #e53e3e; margin-left: 4px; font-size: 8px; }
+        .tab-item.active::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: -1px; 
+            left: 0; 
+            width: 100%; 
+            height: 2px; 
+            background: #3182ce; 
+        }
+        .tab-item .dot { 
+            color: #e53e3e; 
+            margin-left: 4px; 
+            font-size: 8px; 
+        }
 
         /* Comment List */
-        .comment-box { margin-bottom: 25px; }
-        .comment-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .comment-author { font-weight: 700; color: #3182ce; font-size: 13px; }
-        .comment-time { color: #a0aec0; font-size: 11px; }
-        .comment-text { color: #4a5568; font-size: 13px; line-height: 1.5; margin: 0; }
+        .comment-box {
+            margin-bottom: 
+            25px; 
+        }
+        .comment-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 5px; 
+        }
+        .comment-author { 
+            font-weight: 700; 
+            color: #3182ce; 
+            font-size: 13px; 
+        }
+        .comment-time { 
+            color: #a0aec0; 
+            font-size: 11px; 
+        }
+        .comment-text { 
+            color: #4a5568; 
+            font-size: 13px; 
+            line-height: 1.5;
+             margin: 0; 
+            }
 
         .btn-submit {
-            background: #3182ce; color: #fff; border: none; padding: 10px 35px; 
-            border-radius: 8px; font-weight: 600; float: right; cursor: pointer; margin-top: 15px;
+            background: #3182ce; 
+            color: #fff; 
+            border: none; 
+            padding: 10px 35px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            float: right; 
+            cursor: pointer; 
+            margin-top: 15px;
         }
+
+        /* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 { 
+    font-size: 18px; 
+    margin: 0; 
+    color: #2d3748; 
+}
+
+.form-group { 
+    margin-bottom: 15px; 
+}
+.form-group label { 
+    display: block; 
+    font-size: 13px; 
+    margin-bottom: 5px; 
+    color: #718096; 
+}
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #edf2f7;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* Drag & Drop Area */
+.upload-area {
+    border: 2px dashed #cbd5e0;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.upload-area.dragover { 
+    background: #edf2f7; 
+    border-color: #3182ce;
+}
+.upload-area i { 
+    font-size: 30px; 
+    color: #a0aec0; 
+    margin-bottom: 10px; 
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancel { 
+    background: #edf2f7; 
+    color: #4a5568; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 6px; 
+    cursor: pointer;
+ }
+.btn-save { 
+    background: #3182ce; 
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+}
+
+/* Context Menu Style */
+.file-context-menu {
+    position: absolute;
+    display: none;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    width: 200px;
+    z-index: 9999;
+    padding: 8px 0;
+    border: 1px solid #edf2f7;
+}
+
+.menu-item {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: #f7fafc;
+    color: #3182ce;
+}
+
+.menu-item i {
+    width: 16px;
+    font-size: 14px;
+    color: #a0aec0;
+}
+
+.menu-item:hover i {
+    color: #3182ce;
+}
+
+.menu-divider {
+    height: 1px;
+    background: #edf2f7;
+    margin: 4px 0;
+}
+
+.menu-item.delete {
+    color: #e53e3e;
+}
+
+.menu-item.delete:hover {
+    background: #fff5f5;
+}
+
+

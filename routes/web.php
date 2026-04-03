@@ -73,3 +73,23 @@ Route::get('/security', function () {
 Route::get('/projects/task/{name}', function ($name) {
     return view('task_show', ['task_name' => $name]);
 })->name('projects.task.show');
+
+//Route untuk security_setup
+Route::get('/security_setup', function () {
+    return view('security_setup');
+})->name('security_setup.index');
+
+//Route untuk security_setup_email
+Route::get('/security_setup_email', function () {
+    return view('security_setup_email');
+})->name('security_setup_email.index');
+
+//Route untuk register
+Route::get('/register', function () {
+    return view('register');
+})->name('register.index');
+
+//Route untuk forgotpassword
+Route::get('/forgotpassword', function () {
+    return view('forgotpassword');
+})->name('forgotpassword.index');

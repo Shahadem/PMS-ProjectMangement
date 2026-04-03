@@ -15,27 +15,13 @@
             </div>
             <div class="username">Iskandar</div>
              <nav class="nav-links">
-             <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                <i class="fas fa-home"></i>Dashboard
-             </a>
-
-             <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}">
-                <i class="fas fa-history"></i>Timeline
-             </a>
-
-             <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}">
-                 <i class="fas fa-folder"></i>Projects
-             </a>
-
-             <a href="{{ route('users.index') }}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
-                <i class="fas fa-users"></i>Users
-             </a>
-
-             <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}">
-                <i class="fas fa-cog"></i>Settings
-             </a>
+             <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+             <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
+             <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
+             <a href="{{ route('users.index') }}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
+             <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
              </nav>
-            <a href="{{ route('logout.index') }}" class="logout">Log Out</a>
+            <a href="/" class="logout">Log Out</a>
         </aside>
 
     <main class="main-container">
@@ -48,12 +34,44 @@
             <nav class="users-sub-nav">
                 <a href="{{ route('users.index') }}" class="sub-link ">Admins</a>
                 <a href="{{ route('usersindex.index') }}" class="sub-link ">Users</a>
-                <a href="{{ route('rolesindex.index') }}" class="sub-link ">Roles</a>
-                <a href="{{ route('permissionmodule.index') }}" class="sub-link active">Permission Module</a>
+                <a href="{{ route('rolesindex.index') }}" class="sub-link active">Roles</a>
             </nav>
 
+            
+
             <section class="users-table-content">
-                <div class="users-container">
+                 <table class="roles-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Role Designation</th>
+                <th>Created</th>
+                <th>Modified</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+    <tr>
+        <td class="text-muted">RL001</td>
+        <td>
+            <div class="role-designation">
+                <div class="role-icon-circle"><i class="fas fa-user"></i></div>
+                <span>Admin</span>
+            </div>
+        </td>
+        <td class="text-date">23-11-2025 at 10:23PM</td>
+        <td class="text-date">23-11-2025 at 10:23PM</td>
+        <td class="action-cell">
+            <i class="fas fa-ellipsis-h" onclick="toggleActionMenu(event, this)"></i>
+            <div class="action-dropdown">
+                <a href="#">Modify</a>
+                <a href="#">Rename</a>
+                <a href="#" class="text-danger"><i class="far fa-trash-alt"></i> Remove Role</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    </table>
     <div class="permissions-wrapper">
     <div class="permissions-header">
         <h2 class="section-title">Permission Module</h2>
@@ -63,8 +81,6 @@
         <div class="roles-header-row">
             <div class="col-permission">Permission</div>
             <div class="col-role">Admin</div>
-            <div class="col-role">Contributor</div>
-            <div class="col-role">Guest</div>
         </div>
 
         <div class="permission-group">
@@ -76,8 +92,6 @@
             <div class="permission-row">
                 <div class="col-permission">{{ $perm }}</div>
                 <div class="col-role"><input type="checkbox" {{ $loop->first ? 'checked' : '' }}></div>
-                <div class="col-role"><input type="checkbox"></div>
-                <div class="col-role"><input type="checkbox"></div>
             </div>
             @endforeach
         </div>
@@ -91,8 +105,6 @@
             <div class="permission-row">
                 <div class="col-permission">{{ $perm }}</div>
                 <div class="col-role"><input type="checkbox" {{ $loop->first ? 'checked' : '' }}></div>
-                <div class="col-role"><input type="checkbox"></div>
-                <div class="col-role"><input type="checkbox"></div>
             </div>
             @endforeach
         </div>
@@ -106,8 +118,6 @@
             <div class="permission-row">
                 <div class="col-permission">{{ $perm }}</div>
                 <div class="col-role"><input type="checkbox" {{ $loop->first ? 'checked' : '' }}></div>
-                <div class="col-role"><input type="checkbox"></div>
-                <div class="col-role"><input type="checkbox"></div>
             </div>
             @endforeach
         </div>

@@ -15,27 +15,13 @@
             </div>
             <div class="username">Iskandar</div>
              <nav class="nav-links">
-             <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                <i class="fas fa-home"></i>Dashboard
-             </a>
-
-             <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}">
-                <i class="fas fa-history"></i>Timeline
-             </a>
-
-             <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}">
-                 <i class="fas fa-folder"></i>Projects
-             </a>
-
-             <a href="{{ route('users.index') }}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
-                <i class="fas fa-users"></i>Users
-             </a>
-
-             <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}">
-                <i class="fas fa-cog"></i>Settings
-             </a>
+             <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+             <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
+             <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
+             <a href="{{ route('users.index') }}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
+             <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
              </nav>
-            <a href="{{ route('logout.index') }}" class="logout">Log Out</a>
+            <a href="/" class="logout">Log Out</a>
         </aside>
 
     <main class="main-container">
@@ -60,7 +46,6 @@
                 <a href="{{ route('users.index') }}" class="sub-link ">Admins</a>
                 <a href="{{ route('usersindex.index') }}" class="sub-link active">Users</a>
                 <a href="{{ route('rolesindex.index') }}" class="sub-link ">Roles</a>
-                <a href="{{ route('permissionmodule.index') }}" class="sub-link ">Permission Module</a>
             </nav>
 
             <section class="users-table-content">
@@ -154,7 +139,7 @@
         <td class="text-muted">...</td>
     </tr>
 </tbody>
-    </table>
+</table>
 </div>
             </section>
         </div>

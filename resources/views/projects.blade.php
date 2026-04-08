@@ -282,6 +282,13 @@
             border-radius: 4px;
             margin-left: 6px;
         }
+
+        .view-grid .project-list, 
+        .view-grid .project-list tbody, 
+        .view-grid .project-list thead {
+            display: block;
+            width: 100%;
+        }
     </style>
 <script>
     // Pastikan nama fungsi ni sepadan dengan onclick kat butang Create tadi

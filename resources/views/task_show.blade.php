@@ -101,44 +101,92 @@
         </table>
     </div>
 
-    <table class="project-list">
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px;">
+        <button onclick="switchView('list')" id="btnList" style="cursor:pointer; padding: 5px 10px; background: #eee; border: 1px solid #ccc; border-radius: 4px;">
+            <i class="fas fa-list"></i> List
+        </button>
+        <button onclick="switchView('grid')" id="btnGrid" style="cursor:pointer; padding: 5px 10px; background: #fff; border: 1px solid #ccc; border-radius: 4px;">
+            <i class="fas fa-th-large"></i> Grid
+        </button>
+    </div>
+
+    <div id="projectWrapper" class="view-list">
+        <table class="project-list">
+
         <thead>
+
             <tr style="border-bottom: 1px solid #edf2f7; text-align: left;">
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">ID</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Task</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Project</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Status</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Assignee</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Last Modified</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Due Date</th>
+
                 <th style="padding: 12px; font-size: 12px; color: #a0aec0;">Action</th>
+
             </tr>
+
         </thead>
+
         <tbody>
+
             @for($i=0; $i<10; $i++)
+
             <tr style="border-bottom: 1px solid #f7fafc;">
+
                 <td style="padding: 15px 12px;">TS001</td>
-                <td onclick="openFileMenu(event, 'Proposal.doc')" 
-                    oncontextmenu="openFileMenu(event, 'Proposal.doc')" 
+
+                <td onclick="openFileMenu(event, 'Proposal.doc')"
+
+                    oncontextmenu="openFileMenu(event, 'Proposal.doc')"
+
                     style="cursor: pointer;">
+
                     <i class="fas fa-file-alt text-blue"></i> Proposal.doc
+
                 </td>
+
                 <td>Project 1</td>
+
                 <td><span class="status-pending">Pending Review</span></td>
+
                 <td>
+
                     <div class="avatar-group">
+
                         <img src="https://i.pravatar.cc/150?u=a" alt="u">
+
                         <img src="https://i.pravatar.cc/150?u=b" alt="u">
+
                         <div class="avatar-count">+2</div>
+
                     </div>
+
                 </td>
+
                 <td style="color: #a0aec0;">1m ago</td>
+
                 <td style="color: #e53e3e; font-weight: 600;">8 Nov 2025</td>
+
                 <td><i class="fas fa-ellipsis-h" style="color: #cbd5e0; cursor: pointer;" onclick="openFileMenu(event, 'Proposal.doc')"></i></td>
+
             </tr>
+
             @endfor
+
         </tbody>
+
     </table>
+    </div>
 </div>
 
                 <div class="right-sidebar">
@@ -466,6 +514,24 @@
         background: #f0f0f0;
         margin: 4px 0;
     }
+
+    .timeline-container.view-grid thead,
+    .timeline-container.view-grid .year-header,
+    .timeline-container.view-grid .month-header,
+    .timeline-container.view-grid .week-header,
+    .timeline-container.view-grid .hide-grid, 
+    .timeline-container.view-grid td:not(.col-task), 
+    .timeline-container.view-grid th:not(.col-task) {
+        display: none !important;
+    }
+
+        /* 1. Paksa container dan table ke mod Grid */
+    .timeline-container.view-grid {
+        width: 100%;
+        max-height: 80vh !important; /* Biar nampak tinggi ke bawah */
+        overflow-y: auto;
+        border: none !important; /* Buang border container */
+    }
 </style>
 
     
@@ -646,6 +712,28 @@
         alert("Berjaya dihantar!");
         closeApprovalModal();
     }
+
+    function switchView(viewType) {
+    const wrapper = document.getElementById('projectWrapper');
+    const btnList = document.getElementById('btnList');
+    const btnGrid = document.getElementById('btnGrid');
+
+    if (viewType === 'grid') {
+        wrapper.classList.remove('view-list');
+        wrapper.classList.add('view-grid');
+        
+        // Tukar warna butang aktif
+        btnGrid.style.background = '#eee';
+        btnList.style.background = '#fff';
+    } else {
+        wrapper.classList.remove('view-grid');
+        wrapper.classList.add('view-list');
+        
+        // Tukar warna butang aktif
+        btnList.style.background = '#eee';
+        btnGrid.style.background = '#fff';
+    }
+}
 </script>
 </body>
 </html>

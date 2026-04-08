@@ -10,9 +10,11 @@
 <body>
     <div class="wrapper">
     <aside class="sidebar">
-        <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+        <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
              <nav class="nav-links">
              <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
@@ -142,60 +144,67 @@
     </div>
 </div>
 <div class="p-modal-fixed-overlay" id="createProjectModal">
-        <div class="p-modal-container">
-            <div class="p-modal-top">
-                <h3>Create New Project</h3>
-                <span class="p-close-btn" onclick="closeCreateModal()">&times;</span>
+    <div class="p-modal-container">
+        <div class="p-modal-top">
+            <h3>Add New User</h3>
+            <span class="p-close-btn" onclick="closeCreateModal()">&times;</span>
+        </div>
+
+        <form>
+            {{-- Full Name --}}
+            <div class="p-field-item" style="margin-bottom: 16px;">
+                <label>Full Name</label>
+                <input type="text" placeholder="Iskandar Zulkarnain" class="p-main-input" style="width:100%; box-sizing:border-box;">
             </div>
 
-            <form>
-                <div class="p-form-grid-top">
-                    <div class="p-field-item">
-                        <label>Project Name</label>
-                        <input type="text" placeholder="Enter project name" class="p-main-input">
-                    </div>
-                    <div class="p-field-item">
-                        <label>Tags</label>
-                        <select class="p-main-input">
-                            <option>Normal</option>
-                            <option>Urgent</option>
+            {{-- User ID + Assign Role --}}
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                <div class="p-field-item" style="flex: 1;">
+                    <label>User ID</label>
+                    <input type="text" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
+                </div>
+                <div class="p-field-item" style="flex: 1;">
+                    <label>Assign Role</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-user-circle" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#a0aec0; font-size:16px;"></i>
+                        <select class="p-main-input" style="width:100%; padding-left:32px; box-sizing:border-box; appearance:none;">
+                            <option>Admin</option>
+                            <option selected>Contributor</option>
+                            <option>Guest</option>
                         </select>
-                    </div>
-                    <div class="p-field-item">
-                        <label>Add Roles</label>
-                        <div class="p-role-stack">
-                            <span class="p-circle p-gray"></span>
-                            <span class="p-circle p-blue"></span>
-                            <span class="role-circle-iz new-count-style">+2</span>
-                            <div class="p-circle-add"><i class="fas fa-plus"></i></div>
-                        </div>
-                    </div>
-                    <div class="p-field-item">
-                        <label>Set Timeline</label>
-                        <div class="p-timeline-box-custom">
-                            <i class="fas fa-calendar p-cal-icon"></i>
-                            <input type="date" class="p-hidden-date-actual" onchange="updateDateDisplay(this)">
-                            <span class="p-date-placeholder" id="date-display">13/08/2026</span>
-                            <i class="fas fa-chevron-down p-chev-icon"></i>
-                        </div>
+                        <i class="fas fa-chevron-down" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); color:#a0aec0; font-size:11px; pointer-events:none;"></i>
                     </div>
                 </div>
+            </div>
 
-                <div class="p-task-section">
-                    <label class="p-add-task-label">Add Existing Tasks <i class="fas fa-plus"></i></label>
-                    <div class="p-task-scroll-box">
-                        <p>SH001 Task 1</p>
-                        <p>SH001 Task 2</p>
-                    </div>
-                </div>
+            {{-- Mac Address --}}
+            <div class="p-field-item" style="margin-bottom: 16px;">
+                <label>Mac Address</label>
+                <input type="text" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
+            </div>
 
-                <div class="p-modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="p-btn-cancel" onclick="closeCreateModal()" style="padding: 8px 20px; border: 1px solid #eee; background: #fff; cursor: pointer; border-radius: 6px;">Cancel</button>
-                    <button type="submit" class="p-btn-blue" style="padding: 8px 30px; background: #3498db; color: #fff; border: none; cursor: pointer; border-radius: 6px;">Create</button>
+            {{-- Email + Contact Number --}}
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                <div class="p-field-item" style="flex: 1;">
+                    <label>Email</label>
+                    <input type="email" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
                 </div>
-            </form>
-        </div>
+                <div class="p-field-item" style="flex: 1;">
+                    <label>Contact Number</label>
+                    <input type="text" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
+                </div>
+            </div>
+
+            {{-- Footer --}}
+            <div class="p-modal-footer" style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+                <button type="button" class="p-btn-cancel" onclick="closeCreateModal()" 
+                    style="padding:10px 24px; border:1px solid #eee; background:#fff; cursor:pointer; border-radius:8px; font-size:14px;">Cancel</button>
+                <button type="submit" class="p-btn-blue" 
+                    style="padding:10px 24px; background:#3498db; color:#fff; border:none; cursor:pointer; border-radius:8px; font-size:14px; font-weight:600;">Add User(s)</button>
+            </div>
+        </form>
     </div>
+</div>
 <script>
     function toggleModal() {
         const modal = document.getElementById('addUserModal');

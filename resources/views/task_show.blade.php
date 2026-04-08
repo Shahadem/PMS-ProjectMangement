@@ -12,7 +12,11 @@
 <body>
     <div class="wrapper">
         <aside class="sidebar">
-            <div class="profile-circle"><div class="profile-avatar">IZ</div></div>
+            <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
             <nav class="nav-links">
                 <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
@@ -60,9 +64,9 @@
 
             <div class="detail-layout">
                 <div class="left-content">
-    <div class="action-card">
-        <h3>Action Required</h3>
-        <table class="action-table">
+                <div class="action-card">
+                    <h3>Action Required</h3>
+                    <table class="action-table">
             @php
                 $actions = [
                     ['file' => 'Proposal.doc', 'time' => '1m ago'],
@@ -111,7 +115,7 @@
             </tr>
         </thead>
         <tbody>
-            @for($i=0; $i<5; $i++)
+            @for($i=0; $i<10; $i++)
             <tr style="border-bottom: 1px solid #f7fafc;">
                 <td style="padding: 15px 12px;">TS001</td>
                 <td onclick="openFileMenu(event, 'Proposal.doc')" 
@@ -343,7 +347,10 @@
 <style>
     #endDateInput::-webkit-calendar-picker-indicator {
         position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
         width: 100%; height: 100%;
         margin: 0; padding: 0;
         cursor: pointer;
@@ -351,23 +358,113 @@
     }
     /* Priority Radio Styles */
     /* Kekalkan CSS Priority Box sebelum ini */
-    .priority-option { flex: 1; cursor: pointer; }
+    .priority-option { 
+        flex: 1; 
+        cursor: pointer; 
+    }
     .priority-box {
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px;
-        font-size: 13px; font-weight: 600; color: #718096; background: #fff;
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 8px;
+        padding: 10px; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 10px;
+        font-size: 13px; 
+        font-weight: 600; 
+        color: #718096; 
+        background: #fff;
     }
     .priority-option input:checked + .priority-box {
-        border-color: #3182ce; background: #ebf8ff; color: #3182ce;
+        border-color: #3182ce; 
+        background: #ebf8ff; 
+        color: #3182ce;
     }
-    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-    .dot-low { background: #48bb78; }
-    .dot-medium { background: #ecc94b; }
-    .dot-high { background: #e53e3e; }
+    .dot { 
+        width: 8px; 
+        height: 8px; 
+        border-radius: 50%; 
+        display: inline-block; 
+    }
+
+    .dot-low { 
+        background: #48bb78; 
+    }
+
+    .dot-medium { 
+        background: #ecc94b; 
+    }
+    .dot-high { 
+        background: #e53e3e; 
+    }
 
     /* Hover effect untuk button Add */
     .fa-plus:hover {
         color: #3182ce;
+    }
+
+    .action-table td {
+        white-space: nowrap;
+        padding: 10px 12px;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .file-context-menu { 
+        position: fixed;        
+        display: none;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        width: 200px;
+        z-index: 99999;
+        padding: 6px 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .menu-item {
+        padding: 10px 16px;
+        font-size: 13px;
+        color: #4a5568;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    .menu-item:hover {
+        background: #f0f7ff;
+        color: #3182ce;
+    }
+
+    .menu-item i {
+        width: 16px;
+        font-size: 13px;
+        color: #a0aec0;
+    }
+
+    .menu-item:hover i {
+        color: #3182ce;
+    }
+
+    .menu-item.delete {
+        color: #e53e3e;
+    }
+
+    .menu-item.delete:hover {
+        background: #fff5f5;
+    }
+
+    .menu-item.delete i {
+        color: #e53e3e;
+    }
+
+    .menu-divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 4px 0;
     }
 </style>
 
@@ -514,18 +611,16 @@
     });
 
     // Kemaskini fungsi sedia ada ini
-function handleMenuAction(action) {
-    if (action === 'submit') {
-        openApprovalModal();
-    } else {
-        alert(`Action: ${action} untuk fail ${currentSelectedFile}`);
+    function handleMenuAction(action) {
+        if (action === 'submit') {
+            openApprovalModal();
+        } else {
+            alert(`Action: ${action} untuk fail ${currentSelectedFile}`);
+        }
     }
-}
 
-// Tambah fungsi-fungsi baru ini
-let selectedPriority = "";
+    let selectedPriority = "";
 
-// JS sedia ada dikekalkan, cuma pastikan fungsi buka modal betul
     function openApprovalModal() {
         document.getElementById('approvalModal').style.display = 'flex';
     }

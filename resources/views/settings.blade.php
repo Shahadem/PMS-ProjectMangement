@@ -7,12 +7,234 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+<style>
+    /* Avatar wrapper */
+.avatar-wrapper {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    cursor: pointer;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.avatar-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: #fff;
+    font-size: 18px;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+    opacity: 1;
+}
+
+#avatarDisplay {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inline edit (name/title above form) */
+.inline-edit-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-edit-group.hidden {
+    display: none;
+}
+
+.inline-text-input {
+    border: 1.5px solid #3498db;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3748;
+    outline: none;
+    font-family: inherit;
+}
+
+.inline-text-input.small {
+    font-size: 13px;
+    font-weight: 400;
+    color: #718096;
+}
+
+.inline-edit-btn {
+    background: none;
+    border: none;
+    color: #a0aec0;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+
+.inline-edit-btn:hover { 
+    color: #3498db; 
+}
+
+.inline-edit-btn.small { 
+    font-size: 11px; 
+}
+
+.inline-save-btn,
+.inline-cancel-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.inline-save-btn   { 
+    background: #3498db; 
+    color: #fff; 
+}
+
+.inline-cancel-btn { 
+    background: #edf2f7; 
+    color: #718096; 
+}
+
+.inline-save-btn:hover   { 
+    background: #2980b9; 
+}
+
+.inline-cancel-btn:hover { 
+    background: #e2e8f0; 
+}
+
+/* Field-level edit */
+.input-edit-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-edit-wrapper input {
+    width: 100%;
+    padding: 10px 40px 10px 12px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    font-size: 13px;
+    background: #fdfdfd;
+    color: #2d3748;
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+.input-edit-wrapper input:not([disabled]) {
+    border-color: #3498db;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+}
+
+.input-edit-wrapper input:disabled {
+    color: #4a5568;
+    cursor: default;
+}
+
+.field-edit-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #cbd5e0;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+    transition: color 0.15s;
+}
+
+.field-edit-btn:hover { color: #3498db; }
+
+.field-edit-btn.active {
+    color: #3498db;
+}
+
+/* Discard + Save buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.discard-btn {
+    background: #fff;
+    color: #718096;
+    border: 1px solid #e2e8f0;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.discard-btn:hover { 
+    background: #f7fafc; 
+}
+
+/* Toast notification */
+.save-toast {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #2ecc71;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+    gap: 8px;
+    align-items: center;
+    z-index: 9999;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { 
+        transform: translateY(20px); 
+        opacity: 0; 
+    }
+    to   { 
+        transform: translateY(0);   
+        opacity: 1; 
+    }
+}
+</style>
 <body>
     <div class="wrapper">
         <aside class="sidebar">
-            <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+           <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
             <nav class="nav-links">
                 <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
@@ -49,42 +271,112 @@
             </nav>
 
             <section class="profile-form-section">
-                <h2 class="section-heading">My Profile</h2>
-                    
-                <div class="profile-card-top">
-                    <div class="large-avatar">IZ</div>
-                        <div class="user-meta">
-                            <h3>Iskandar Zulkarnain <i class="fas fa-pencil-alt edit-pen"></i></h3>
-                            <p>Senior Art Director</p>
-                        </div>
-                    </div>
+    <h2 class="section-heading">My Profile</h2>
 
-                <form class="profile-grid-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Full Name</label>
-                                <input type="text" value="Iskandar Zulkarnain" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" value="Senior Art Director" disabled>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" placeholder="">
-                            </div>
-                            <div class="form-group">
-                                <label>Phone Number</label>
-                                <input type="text" placeholder="">
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="save-btn">Save</button>
-                        </div>
-                    </form>
-                </section>
+    {{-- Profile Card Top --}}
+    <div class="profile-card-top">
+
+        {{-- Avatar with edit overlay --}}
+        <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()" title="Change photo">
+            <div class="large-avatar" id="avatarDisplay">IZ</div>
+            <div class="avatar-overlay">
+                <i class="fas fa-camera"></i>
+            </div>
+            <input type="file" id="avatarInput" accept="image/*" hidden onchange="previewAvatar(this)">
+        </div>
+
+        <div class="user-meta">
+            {{-- Editable name inline --}}
+            <div class="inline-edit-group" id="nameDisplay">
+                <h3 id="nameText">Iskandar Zulkarnain</h3>
+                <button class="inline-edit-btn" onclick="toggleInlineEdit('name')">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+            </div>
+            <div class="inline-edit-group hidden" id="nameEdit">
+                <input type="text" id="nameInput" class="inline-text-input" value="Iskandar Zulkarnain">
+                <button class="inline-save-btn" onclick="saveInlineEdit('name')">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="inline-cancel-btn" onclick="cancelInlineEdit('name')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            {{-- Editable title inline --}}
+            <div class="inline-edit-group" id="titleDisplay">
+                <p id="titleText">Senior Art Director</p>
+                <button class="inline-edit-btn small" onclick="toggleInlineEdit('title')">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+            </div>
+            <div class="inline-edit-group hidden" id="titleEdit">
+                <input type="text" id="titleInput" class="inline-text-input small" value="Senior Art Director">
+                <button class="inline-save-btn" onclick="saveInlineEdit('title')">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="inline-cancel-btn" onclick="cancelInlineEdit('title')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Form Fields --}}
+    <form class="profile-grid-form" id="profileForm">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Full Name</label>
+                <div class="input-edit-wrapper">
+                    <input type="text" id="fullNameField" value="Iskandar Zulkarnain" disabled>
+                    <button type="button" class="field-edit-btn" onclick="toggleField('fullNameField', this)">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Title</label>
+                <div class="input-edit-wrapper">
+                    <input type="text" id="titleField" value="Senior Art Director" disabled>
+                    <button type="button" class="field-edit-btn" onclick="toggleField('titleField', this)">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email</label>
+                <div class="input-edit-wrapper">
+                    <input type="email" id="emailField" value="iskandar@gmail.com" disabled>
+                    <button type="button" class="field-edit-btn" onclick="toggleField('emailField', this)">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <div class="input-edit-wrapper">
+                    <input type="text" id="phoneField" value="017-7853 5385" disabled>
+                    <button type="button" class="field-edit-btn" onclick="toggleField('phoneField', this)">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="discard-btn" onclick="discardChanges()">Discard</button>
+            <button type="submit" class="save-btn" onclick="saveProfile(event)">Save Changes</button>
+        </div>
+    </form>
+
+    {{-- Success toast --}}
+    <div id="saveToast" class="save-toast">
+        <i class="fas fa-check-circle"></i> Profile updated successfully!
+    </div>
+
+</section>
             </div>
         </main>
     </div>
@@ -172,6 +464,189 @@
         const dateValue = input.value;
         if (dateValue) {
             document.getElementById('date-display').innerText = dateValue;
+        }
+    }
+    // ── Avatar Preview ──────────────────────────────────────
+    function previewAvatar(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const avatar = document.getElementById('avatarDisplay');
+            avatar.innerHTML = '';
+            avatar.style.background = 'none';
+            avatar.style.padding = '0';
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.cssText = 'width:90px;height:90px;border-radius:50%;object-fit:cover;display:block;';
+            avatar.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ── Inline Edit (Name & Title in avatar area) ───────────
+    function toggleInlineEdit(type) {
+        document.getElementById(type + 'Display').classList.add('hidden');
+        document.getElementById(type + 'Edit').classList.remove('hidden');
+        document.getElementById(type + 'Input').focus();
+        document.getElementById(type + 'Input').select();
+    }
+
+    function saveInlineEdit(type) {
+        const val = document.getElementById(type + 'Input').value.trim();
+        if (val) document.getElementById(type + 'Text').textContent = val;
+        document.getElementById(type + 'Display').classList.remove('hidden');
+        document.getElementById(type + 'Edit').classList.add('hidden');
+
+        // Sync with form fields
+        if (type === 'name') {
+            document.getElementById('fullNameField').value = val;
+        }
+        if (type === 'title') {
+            document.getElementById('titleField').value = val;
+        }
+    }
+
+    function cancelInlineEdit(type) {
+        document.getElementById(type + 'Display').classList.remove('hidden');
+        document.getElementById(type + 'Edit').classList.add('hidden');
+    }
+
+    // Allow Enter key to save inline edit
+    document.addEventListener('DOMContentLoaded', function () {
+        ['name', 'title'].forEach(type => {
+            const input = document.getElementById(type + 'Input');
+            if (input) {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') saveInlineEdit(type);
+                    if (e.key === 'Escape') cancelInlineEdit(type);
+                });
+            }
+        });
+    });
+
+    // ── Field-level Edit ────────────────────────────────────
+    function toggleField(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        const isDisabled = input.disabled;
+
+        if (isDisabled) {
+            // Enable for editing
+            input.disabled = false;
+            input.focus();
+            input.select();
+            btn.innerHTML = '<i class="fas fa-check" style="color:#3498db;"></i>';
+            btn.setAttribute('onclick', `saveField('${fieldId}', this)`);
+            input.closest('.input-edit-wrapper').classList.add('editing');
+        }
+    }
+
+    function saveField(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        input.disabled = true;
+        btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+        btn.setAttribute('onclick', `toggleField('${fieldId}', this)`);
+        input.closest('.input-edit-wrapper').classList.remove('editing');
+
+        // Sync name/title back to avatar area
+        if (fieldId === 'fullNameField') {
+            document.getElementById('nameText').textContent = input.value;
+            document.getElementById('nameInput').value = input.value;
+        }
+        if (fieldId === 'titleField') {
+            document.getElementById('titleText').textContent = input.value;
+            document.getElementById('titleInput').value = input.value;
+        }
+    }
+
+    // Allow Enter to save field
+    document.addEventListener('DOMContentLoaded', function () {
+        ['fullNameField','titleField','emailField','phoneField'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        const btn = this.closest('.input-edit-wrapper').querySelector('button');
+                        if (btn) btn.click();
+                    }
+                    if (e.key === 'Escape') {
+                        this.disabled = true;
+                        const btn = this.closest('.input-edit-wrapper').querySelector('button');
+                        if (btn) {
+                            btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+                            btn.setAttribute('onclick', `toggleField('${id}', this)`);
+                        }
+                        this.closest('.input-edit-wrapper').classList.remove('editing');
+                    }
+                });
+            }
+        });
+    });
+
+    // ── Discard ─────────────────────────────────────────────
+    function discardChanges() {
+        ['fullNameField','titleField','emailField','phoneField'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.disabled = true;
+                input.value = input.defaultValue;
+                const btn = input.closest('.input-edit-wrapper').querySelector('button');
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+                    btn.setAttribute('onclick', `toggleField('${id}', this)`);
+                }
+                input.closest('.input-edit-wrapper').classList.remove('editing');
+            }
+        });
+
+        // Reset inline edits
+        ['name','title'].forEach(type => {
+            const displayEl = document.getElementById(type + 'Display');
+            const editEl = document.getElementById(type + 'Edit');
+            if (displayEl) displayEl.classList.remove('hidden');
+            if (editEl) editEl.classList.add('hidden');
+        });
+    }
+
+    // ── Save & Toast ─────────────────────────────────────────
+    function saveProfile(e) {
+        e.preventDefault();
+
+        // Save any open fields
+        ['fullNameField','titleField','emailField','phoneField'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input && !input.disabled) {
+                const btn = input.closest('.input-edit-wrapper').querySelector('button');
+                if (btn) btn.click();
+            }
+        });
+
+        // Show toast
+        const toast = document.getElementById('saveToast');
+        toast.style.display = 'flex';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+
+    // ── Create Project Modal ─────────────────────────────────
+    function openCreateModal() {
+        document.getElementById('createProjectModal').style.display = 'flex';
+    }
+
+    function closeCreateModal() {
+        document.getElementById('createProjectModal').style.display = 'none';
+    }
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('createProjectModal');
+        if (event.target === modal) modal.style.display = 'none';
+    });
+
+    function updateDateDisplay(input) {
+        if (input.value) {
+            const [year, month, day] = input.value.split('-');
+            document.getElementById('date-display').textContent = `${day}/${month}/${year}`;
         }
     }
 </script>

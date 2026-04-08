@@ -10,18 +10,20 @@
 <body>
     <div class="wrapper">
         <aside class="sidebar">
-            <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+            <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
             <nav class="nav-links">
                 <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
-                <a href="{{ route('timeline.index') }}" class="nav-item"><i class="fas fa-history"></i>Timeline</a>
+                <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{ route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="{{ route('logout.index') }}" class="logout-link">Log Out</a>
+            <a href="/" class="logout">Log Out</a>
         </aside>
 
         <main class="main-container">
@@ -40,7 +42,7 @@
                 </div>
             </header>
 
-            <div class="settings-layout">
+    <div class="settings-layout">
     <nav class="settings-sub-nav">
         <a href="{{ route('settings.index') }}" class="sub-nav-item">My Profile</a>
         <a href="{{ route('security.index') }}" class="sub-nav-item">Security</a>
@@ -98,18 +100,17 @@
                         </div>
                     </div>
                     <div class="p-field-item">
-                        <label>Set Timeline</label>
-                        <div class="p-timeline-box-custom">
-                            <i class="fas fa-calendar p-cal-icon"></i>
-                            <input type="date" class="p-hidden-date-actual" onchange="updateDateDisplay(this)">
-                            <span class="p-date-placeholder" id="date-display">13/08/2026</span>
-                            <i class="fas fa-chevron-down p-chev-icon"></i>
-                        </div>
+                    <label>Set Timeline</label>
+                    <div class="p-timeline-box-custom" onclick="document.getElementById('actualDate').showPicker()">
+                        <i class="fas fa-calendar p-cal-icon"></i>
+                        <span class="p-date-placeholder" id="date-display">13/08/2026</span>
+                        <i class="fas fa-chevron-down p-chev-icon"></i>
+                        <input type="date" id="actualDate" class="p-hidden-date-actual" onchange="updateDateDisplay(this)">
                     </div>
-                </div>
+                    </div>
 
                 <div class="p-task-section">
-                    <label class="p-add-task-label">Add Existing Tasks <i class="fas fa-plus"></i></label>
+                <label class="p-add-task-label">Add Existing Tasks <i class="fas fa-plus"></i></label>
                     <div class="p-task-scroll-box">
                         <p>SH001 Task 1</p>
                         <p>SH001 Task 2</p>

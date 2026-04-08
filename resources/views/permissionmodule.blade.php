@@ -10,9 +10,11 @@
 <body>
     <div class="wrapper">
     <aside class="sidebar">
-        <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+        <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
              <nav class="nav-links">
              <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>

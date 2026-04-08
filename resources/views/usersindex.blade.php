@@ -10,9 +10,11 @@
 <body>
     <div class="wrapper">
     <aside class="sidebar">
-        <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+        <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
              <nav class="nav-links">
              <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
@@ -41,109 +43,233 @@
             </header>
 
         <div class="users-layout-wrapper">
-            
-            <nav class="users-sub-nav">
-                <a href="{{ route('users.index') }}" class="sub-link ">Admins</a>
-                <a href="{{ route('usersindex.index') }}" class="sub-link active">Users</a>
-                <a href="{{ route('rolesindex.index') }}" class="sub-link ">Roles</a>
-            </nav>
+    <nav class="users-sub-nav">
+        <a href="{{ route('users.index') }}" class="sub-link">Admins</a>
+        <a href="{{ route('usersindex.index') }}" class="sub-link active">Users</a>
+        <a href="{{ route('rolesindex.index') }}" class="sub-link">Roles</a>
+    </nav>
 
-            <section class="users-table-content">
-                <div class="users-container">
-    <div class="user-management-header">
-        <h2 class="sub-title">User Management</h2>
-        <a href="#" class="btn-add-user">+ Add New User</a>
-    </div>
 
-    <p class="section-label">Other Users</p>
-
-    <table class="users-table">
-        <thead>
-            <tr>
-                <th><input type="checkbox"></th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Group</th>
-                <th>Role</th>
-                <th>Projects Assigned</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-    <tr>
-        <td><input type="checkbox"></td>
-        <td class="text-muted">US001</td>
-        <td>
-            <div class="user-info">
-                <strong>Iskandar Zulkarnain</strong>
-                <span>Last login 2 minutes ago</span>
-            </div>
-        </td>
-        <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
-        <td><span class="badge badge-pink">Project Team 1</span></td>
-        <td class="role-cell">
-            <div class="role-selector" onclick="toggleRoleDropdown(this)">
-                <i class="far fa-user"></i> Contributor <i class="fas fa-pencil-alt edit-sm"></i>
-            </div>
-            <div class="role-dropdown">
-                <div class="role-item">
-                    <strong>Admin</strong>
-                    <p>Can manage account settings and edit</p>
+    <section class="users-table-content">
+        <table class="users-table">
+            <thead>
+                <div class="">
+                    <h2 class="section-title">User Management</h2>
                 </div>
-                <div class="role-item active">
-                    <strong>Contributor</strong>
-                    <p>Can view/edit project and tasks</p>
-                </div>
-                <div class="role-item">
-                    <strong>Guest</strong>
-                    <p>Can only view and comment</p>
-                </div>
-            </div>
-        </td>
-        <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
-        <td class="text-muted">...</td>
-    </tr>
-
-    <tr class="row-selected">
-        <td><input type="checkbox" checked></td>
-        <td class="text-muted">US001</td>
-        <td>
-            <div class="user-info">
-                <strong>Iskandar Zulkarnain</strong>
-                <span>Last login 2 minutes ago</span>
-            </div>
-        </td>
-        <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
-        <td><span class="badge badge-blue">Project Team 2</span></td>
-        <td class="role-cell"> 
-            <div class="role-selector" onclick="toggleRoleDropdown(this)">
-                <i class="far fa-user"></i> Contributor <i class="fas fa-pencil-alt edit-sm"></i>
-            </div>
-            <div class="role-dropdown">
-                <div class="role-item">
-                    <strong>Admin</strong>
-                    <p>Can manage account settings and edit</p>
-                </div>
-                <div class="role-item active">
-                    <strong>Contributor</strong>
-                    <p>Can view/edit project and tasks</p>
-                </div>
-                <div class="role-item">
-                    <strong>Guest</strong>
-                    <p>Can only view and comment</p>
-                </div>
-            </div>
-        </td>
-        <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
-        <td class="text-muted">...</td>
-    </tr>
-</tbody>
-</table>
-</div>
-            </section>
-        </div>
-    </main>
+                <div class="breadcrumb">Other Users</div>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Group</th>
+                    <th>Role</th>
+                    <th>Projects Assigned</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td class="text-muted">US001</td>
+                    <td><div class="user-info"><strong>Iskandar Zulkarnain</strong><span>Last login 2 minutes ago</span></div></td>
+                    <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
+                    <td><span class="badge badge-pink">Project Team 1</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> Contributor</i></div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                        <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                            <strong>Admin</strong>
+                            <p>Can manage account settings and edit</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                            <strong>Contributor</strong>
+                            <p>Can view/edit project and tasks</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                            <strong>Guest</strong>
+                            <p>Can only view and comment</p>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr class="row-selected">
+                    <td><input type="checkbox" checked></td>
+                    <td class="text-muted">US001</td>
+                    <td><div class="user-info"><strong>Iskandar Zulkarnain</strong><span>Last login 2 minutes ago</span></div></td>
+                    <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
+                    <td><span class="badge badge-blue">Project Team 2</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> Contributor</i></div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                        <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                            <strong>Admin</strong>
+                            <p>Can manage account settings and edit</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                            <strong>Contributor</strong>
+                            <p>Can view/edit project and tasks</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                            <strong>Guest</strong>
+                            <p>Can only view and comment</p>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr class="row-selected">
+                    <td><input type="checkbox" checked></td>
+                    <td class="text-muted">US001</td>
+                    <td><div class="user-info"><strong>Iskandar Zulkarnain</strong><span>Last login 2 minutes ago</span></div></td>
+                    <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
+                    <td><span class="badge badge-blue">Project Team 2</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> Contributor</i></div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                        <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                            <strong>Admin</strong>
+                            <p>Can manage account settings and edit</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                            <strong>Contributor</strong>
+                            <p>Can view/edit project and tasks</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                            <strong>Guest</strong>
+                            <p>Can only view and comment</p>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr class="row-selected">
+                    <td><input type="checkbox" checked></td>
+                    <td class="text-muted">US001</td>
+                    <td><div class="user-info"><strong>Iskandar Zulkarnain</strong><span>Last login 2 minutes ago</span></div></td>
+                    <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
+                    <td><span class="badge badge-blue">Project Team 2</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> Contributor</i></div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                        <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                            <strong>Admin</strong>
+                            <p>Can manage account settings and edit</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                            <strong>Contributor</strong>
+                            <p>Can view/edit project and tasks</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                            <strong>Guest</strong>
+                            <p>Can only view and comment</p>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr class="row-selected">
+                    <td><input type="checkbox" checked></td>
+                    <td class="text-muted">US001</td>
+                    <td><div class="user-info"><strong>Iskandar Zulkarnain</strong><span>Last login 2 minutes ago</span></div></td>
+                    <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
+                    <td><span class="badge badge-blue">Project Team 2</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> Contributor</i></div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                        <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                            <strong>Admin</strong>
+                            <p>Can manage account settings and edit</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                            <strong>Contributor</strong>
+                            <p>Can view/edit project and tasks</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                            <strong>Guest</strong>
+                            <p>Can only view and comment</p>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr class="row-selected">
+                    <td><input type="checkbox" checked></td>
+                    <td class="text-muted">US001</td>
+                    <td><div class="user-info"><strong>Iskandar Zulkarnain</strong><span>Last login 2 minutes ago</span></div></td>
+                    <td class="text-contact">iskandar@gmail.com<br>017 - 7853 5385</td>
+                    <td><span class="badge badge-blue">Project Team 2</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> Contributor</i></div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                        <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                            <strong>Admin</strong>
+                            <p>Can manage account settings and edit</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                            <strong>Contributor</strong>
+                            <p>Can view/edit project and tasks</p>
+                        </div>
+                        <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                            <strong>Guest</strong>
+                            <p>Can only view and comment</p>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </div>
     <div id="addUserModal" class="modal-overlay">
     <div class="modal-content">
@@ -384,6 +510,43 @@ function toggleModal() {
             document.getElementById('date-display').innerText = dateValue;
         }
     }
+
+    function toggleActionDots(event, btn) {
+        event.stopPropagation();
+        const cell = btn.closest('.action-cell');
+
+        // Close all other open dots dropdowns
+        document.querySelectorAll('.action-cell.dots-active').forEach(c => {
+            if (c !== cell) c.classList.remove('dots-active');
+        });
+
+        cell.classList.toggle('dots-active');
+    }
+
+    function selectRole(item, role) {
+        // Close the dropdown
+        item.closest('.action-cell').classList.remove('dots-active');
+        // Optional: update role display in the row
+        const row = item.closest('tr');
+        const roleSelector = row.querySelector('.role-selector');
+        if (roleSelector) {
+            roleSelector.innerHTML = `<i class="far fa-user"></i> ${role} <i class="fas fa-pencil-alt edit-sm"></i>`;
+        }
+    }
+
+    function toggleRoleDropdown(el) {
+        const cell = el.closest('.role-cell');
+        document.querySelectorAll('.role-cell.active').forEach(c => {
+            if (c !== cell) c.classList.remove('active');
+        });
+        cell.classList.toggle('active');
+    }
+
+// Close all dropdowns when clicking outside
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.action-cell.dots-active').forEach(c => c.classList.remove('dots-active'));
+        document.querySelectorAll('.role-cell.active').forEach(c => c.classList.remove('active'));
+    });
 </script>
 </body>
 </html>

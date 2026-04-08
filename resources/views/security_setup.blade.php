@@ -34,39 +34,80 @@
   }
  
   .back-btn {
-    width: 30px; height: 30px;
-    background: none; border: none; cursor: pointer;
-    border-radius: 7px; color: #555;
-    display: flex; align-items: center; justify-content: center;
+    width: 30px; 
+    height: 30px;
+    background: none; 
+    border: none; 
+    cursor: pointer;
+    border-radius: 7px; 
+    color: #555;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
     transition: background 0.15s;
     flex-shrink: 0;
   }
-  .back-btn:hover { background: #f3f3f7; }
-  .back-btn svg { width: 17px; height: 17px; }
+
+  .back-btn:hover { 
+    background: #f3f3f7; 
+  }
+
+  .back-btn svg { 
+    width: 17px; 
+    height: 17px; 
+  }
  
   .card-header h2 {
-    font-size: 15px; font-weight: 700; color: #18181b;
+    font-size: 15px; 
+    font-weight: 700; 
+    color: #18181b;
     letter-spacing: -0.2px;
   }
  
   /* Intro block */
-  .intro-block { margin-bottom: 22px; }
-  .intro-block .intro-label {
-    font-size: 13.5px; font-weight: 700; color: #18181b; margin-bottom: 3px;
+  .intro-block { 
+    margin-bottom: 22px; 
   }
-  .intro-block .intro-desc { font-size: 12.5px; color: #6b7280; line-height: 1.5; }
+
+  .intro-block .intro-label {
+    font-size: 13.5px; 
+    font-weight: 700; 
+    color: #18181b; 
+    margin-bottom: 3px;
+  }
+
+  .intro-block .intro-desc { 
+    font-size: 12.5px; 
+    color: #6b7280; 
+    line-height: 1.5; 
+  }
  
   /* Step rows */
-  .step { margin-bottom: 22px; }
-  .step:last-child { margin-bottom: 0; }
+  .step { 
+    margin-bottom: 22px; 
+  }
+
+  .step:last-child { 
+    margin-bottom: 0; 
+  }
  
   .step-title {
-    font-size: 13px; font-weight: 700; color: #18181b; margin-bottom: 4px;
+    font-size: 13px; 
+    font-weight: 700; 
+    color: #18181b; 
+    margin-bottom: 4px;
   }
-  .step-desc { font-size: 12.5px; color: #6b7280; line-height: 1.5; }
+
+  .step-desc { 
+    font-size: 12.5px; 
+    color: #6b7280; 
+    line-height: 1.5; 
+  }
  
   /* QR section */
-  .qr-section { margin-top: 12px; }
+  .qr-section { 
+    margin-top: 12px; 
+  }
 
   .qrimage {
     width: 106px;
@@ -76,17 +117,26 @@
   }
  
   .qr-img-box {
-    width: 100px; height: 100px;
-    border: 0px solid #dde1ea; border-radius: 8px;
-    overflow: hidden; background: #fff;
-    display: flex; align-items: center; justify-content: center;
+    width: 100px; 
+    height: 100px;
+    border: 0px solid #dde1ea; 
+    border-radius: 8px;
+    overflow: hidden; 
+    background: #fff;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
     margin-bottom: 12px;
   }
  
-  .qr-img-box svg { width: 86px; height: 86px; }
+  .qr-img-box svg { 
+    width: 86px; 
+    height: 86px; }
  
   .manual-label {
-    font-size: 12px; color: #6b7280; margin-bottom: 7px;
+    font-size: 12px; 
+    color: #6b7280; 
+    margin-bottom: 7px;
   }
  
   .manual-key-box {
@@ -96,10 +146,13 @@
     display: inline-block;
     min-width: 240px;
   }
+
   .manual-key-box span {
     font-family: 'calibri';
-    font-size: 16px; font-weight: 700;
-    color: #626262; letter-spacing: 1.5px;
+    font-size: 16px; 
+    font-weight: 700;
+    color: #626262; 
+    letter-spacing: 1.5px;
   }
  
   /* OTP input */
@@ -112,11 +165,20 @@
     padding: 0 13px;
     font-size: 13.5px;
     font-family: inherit;
-    color: #18181b; background: #fafafa; outline: none;
+    color: #18181b; 
+    background: #fafafa; 
+    outline: none;
     transition: border-color 0.15s, background 0.15s;
   }
-  .otp-input::placeholder { color: #b5b5c3; }
-  .otp-input:focus { border-color: #4d7cf6; background: #fff; }
+
+  .otp-input::placeholder { 
+    color: #b5b5c3; 
+  }
+
+  .otp-input:focus { 
+    border-color: #4d7cf6; 
+    background: #fff; 
+  }
  
   /* Footer */
   .card-footer {
@@ -140,7 +202,9 @@
     transition: color 0.15s;
 }
 
-  .btn-cancel:hover { color: #18181b; }
+  .btn-cancel:hover { 
+    color: #18181b; 
+  }
  
   .btn-verify {
     width: 147px;
@@ -148,18 +212,25 @@
     border-radius: 7.99px; padding: 11px 30px;
     font-family: inherit; font-size: 13.5px; font-weight: 700;
     color: #fff; cursor: pointer;
-    box-shadow: 0 3px 10px rgba(77,124,246,0.28);
     transition: background 0.15s, transform 0.1s;
   }
-  .btn-verify:hover { background: #3a6ae8; }
-  .btn-verify:active { transform: scale(0.98); }
+
+  .btn-verify:hover { 
+    background: #3a6ae8; 
+  }
+
+  .btn-verify:active { 
+    transform: scale(0.98); 
+  }
 </style>
 <body>
     <div class="wrapper">
         <aside class="sidebar">
-            <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+            <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
             <nav class="nav-links">
                 <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>

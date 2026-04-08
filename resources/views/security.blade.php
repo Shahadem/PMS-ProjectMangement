@@ -10,9 +10,11 @@
 <body>
     <div class="wrapper">
         <aside class="sidebar">
-            <div class="profile-circle">
-                <div class="profile-avatar">IZ</div>
-            </div>
+            <a href="{{ route('settings.index') }}" style="text-decoration: none;">
+                 <div class="profile-circle">
+                    <div class="profile-avatar">IZ</div>
+                </div>
+            </a>
             <div class="username">Iskandar</div>
             <nav class="nav-links">
                 <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
@@ -34,9 +36,7 @@
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search">
                     </div>
-                    <button class="btn-create" onclick="openCreateModal()">
-                        <i class="fas fa-plus-circle"></i> Create
-                    </button>
+                    <button class="btn-create" onclick="openCreateModal()"><i class="fas fa-plus-circle"></i> Create</button>
                 </div>
             </header>
 
@@ -57,11 +57,11 @@
     <div class="p-2fa-options">
         <label class="p-2fa-card">
             <input type="radio" name="2fa_method" value="app" checked>
-            <span class="p-radio-custom"></span>
-            <div class="p-2fa-info">
-                <strong>Mobile app authenticator</strong>
-                <span>Use a mobile app to generate verification codes</span>
-            </div>
+                <span class="p-radio-custom"></span>
+                <div class="p-2fa-info">
+                    <strong>Mobile app authenticator</strong>
+                    <span>Use a mobile app to generate verification codes</span>
+                </div>
         </label>
 
         <label class="p-2fa-card">

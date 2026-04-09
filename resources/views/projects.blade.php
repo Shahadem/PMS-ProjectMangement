@@ -289,6 +289,22 @@
             display: block;
             width: 100%;
         }
+
+        .p-timeline-box-custom {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .p-hidden-date-actual {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
     </style>
 <script>
     // Pastikan nama fungsi ni sepadan dengan onclick kat butang Create tadi
@@ -354,6 +370,22 @@
         document.getElementById('formError').style.display = 'none';
         document.querySelectorAll('#existingTasksList input[type="checkbox"]').forEach(cb => cb.checked = false);
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const timelineBox = document.querySelector('.p-timeline-box-custom');
+        const dateInput = document.getElementById('projectDateInput');
+
+        if (timelineBox && dateInput) {
+            timelineBox.addEventListener('click', function(event) {
+                if (event.target !== dateInput) {
+                    dateInput.focus();
+                    if (typeof dateInput.showPicker === 'function') {
+                        dateInput.showPicker();
+                    }
+                }
+            });
+        }
+    });
 
     // ── Date display ────────────────────────────────
     function updateDateDisplay(input) {

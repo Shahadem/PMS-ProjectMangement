@@ -36,7 +36,7 @@
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search">
                     </div>
-                    <button class="btn-create" onclick="openCreateModal()">
+                    <button class="btn-create" onclick="toggleModal()">
                         <i class="fas fa-plus-circle"></i> Create
                     </button>
                 </div>
@@ -143,81 +143,11 @@
         </form>
     </div>
 </div>
-<div class="p-modal-fixed-overlay" id="createProjectModal">
-    <div class="p-modal-container">
-        <div class="p-modal-top">
-            <h3>Add New User</h3>
-            <span class="p-close-btn" onclick="closeCreateModal()">&times;</span>
-        </div>
-
-        <form>
-            {{-- Full Name --}}
-            <div class="p-field-item" style="margin-bottom: 16px;">
-                <label>Full Name</label>
-                <input type="text" placeholder="Iskandar Zulkarnain" class="p-main-input" style="width:100%; box-sizing:border-box;">
-            </div>
-
-            {{-- User ID + Assign Role --}}
-            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-                <div class="p-field-item" style="flex: 1;">
-                    <label>User ID</label>
-                    <input type="text" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
-                </div>
-                <div class="p-field-item" style="flex: 1;">
-                    <label>Assign Role</label>
-                    <div style="position: relative;">
-                        <i class="fas fa-user-circle" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#a0aec0; font-size:16px;"></i>
-                        <select class="p-main-input" style="width:100%; padding-left:32px; box-sizing:border-box; appearance:none;">
-                            <option>Admin</option>
-                            <option selected>Contributor</option>
-                            <option>Guest</option>
-                        </select>
-                        <i class="fas fa-chevron-down" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); color:#a0aec0; font-size:11px; pointer-events:none;"></i>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Mac Address --}}
-            <div class="p-field-item" style="margin-bottom: 16px;">
-                <label>Mac Address</label>
-                <input type="text" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
-            </div>
-
-            {{-- Email + Contact Number --}}
-            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
-                <div class="p-field-item" style="flex: 1;">
-                    <label>Email</label>
-                    <input type="email" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
-                </div>
-                <div class="p-field-item" style="flex: 1;">
-                    <label>Contact Number</label>
-                    <input type="text" placeholder="" class="p-main-input" style="width:100%; box-sizing:border-box;">
-                </div>
-            </div>
-
-            {{-- Footer --}}
-            <div class="p-modal-footer" style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
-                <button type="button" class="p-btn-cancel" onclick="closeCreateModal()" 
-                    style="padding:10px 24px; border:1px solid #eee; background:#fff; cursor:pointer; border-radius:8px; font-size:14px;">Cancel</button>
-                <button type="submit" class="p-btn-blue" 
-                    style="padding:10px 24px; background:#3498db; color:#fff; border:none; cursor:pointer; border-radius:8px; font-size:14px; font-weight:600;">Add User(s)</button>
-            </div>
-        </form>
-    </div>
-</div>
 <script>
-    function toggleModal() {
-        const modal = document.getElementById('addUserModal');
-        if (modal.style.display === "flex") {
-            modal.style.display = "none";
-        } else {
-            modal.style.display = "flex";
-        }
-    }
-
     // Sambungkan fungsi ke butang Create
-    document.querySelector('.btn-add-user').addEventListener('click', toggleModal);
-    document.querySelector('.add-user-link').addEventListener('click', toggleModal);
+    document.querySelectorAll('.btn-add-user, .btn-create').forEach(button => {
+        if (button) button.addEventListener('click', toggleModal);
+    });
 
     function showSection(sectionId, element) {
     // 1. Sembunyikan semua seksyen kandungan
@@ -239,27 +169,18 @@
     element.classList.add('active');
 }
  // Pastikan nama fungsi ni sepadan dengan onclick kat butang Create tadi
-    function openCreateModal() {
-        var modal = document.getElementById('createProjectModal');
-        if (modal) {
-            modal.style.display = 'flex';
-        }
+    function toggleModal() {
+        const modal = document.getElementById('addUserModal');
+        if (!modal) return;
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    function closeCreateModal() {
-        var modal = document.getElementById('createProjectModal');
-        if (modal) {
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('addUserModal');
+        if (event.target === modal) {
             modal.style.display = 'none';
         }
-    }
-
-    // Tutup bila klik luar kotak
-    window.onclick = function(event) {
-        var modal = document.getElementById('createProjectModal');
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    });
 
     function updateDateDisplay(input) {
         const dateValue = input.value;

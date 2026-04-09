@@ -187,6 +187,12 @@
 
     </table>
     </div>
+
+    <!-- Grid view container (file manager style) -->
+    <div id="gridWrapper" style="display: none;" class="file-grid-container">
+        <div id="fileGrid" class="file-grid">
+        </div>
+    </div>
 </div>
 
                 <div class="right-sidebar">
@@ -254,6 +260,7 @@
             </div>
         </main>
     </div>
+
     <div id="createTaskModal" class="modal">
     <div class="modal-content" style="background: #fff; padding: 24px; border-radius: 12px; width: 420px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
         
@@ -339,6 +346,7 @@
     <div class="menu-divider"></div>
     <div class="menu-item delete" onclick="handleMenuAction('delete')"><i class="fas fa-trash-alt"></i> Delete</div>
 </div>
+
 
 <div id="approvalModal" class="modal">
     <div class="modal-content" style="background: #fff; padding: 24px; border-radius: 16px; width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); font-family: 'Segoe UI', Roboto, sans-serif;">
@@ -532,6 +540,81 @@
         overflow-y: auto;
         border: none !important; /* Buang border container */
     }
+
+        /* ========== FILE MANAGER GRID VIEW ========== */
+    .file-grid-container {
+        border: 1px solid #edf2f7;
+        border-radius: 12px;
+        background: #fff;
+        padding: 14px 16px;
+    }
+    .file-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 160px));
+        gap: 28px;
+        justify-content: start;
+        margin-top: 0;
+        padding: 12px 4px;
+    }
+    .file-grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        padding: 18px 8px 14px;
+        border-radius: 20px;
+        transition: all 0.2s;
+        background: transparent;
+    }
+    .file-grid-item:hover {
+        background: #f8fafc;
+        transform: translateY(-4px);
+    }
+    .file-icon {
+        font-size: 64px;
+        margin-bottom: 14px;
+    }
+    .file-icon .fa-folder { 
+        color: #f59e0b; 
+    }
+    .file-icon .fa-file-word { 
+        color: #2b5797; 
+    }
+    .file-icon .fa-file-excel { 
+        color: #1f724c; 
+    }
+    .file-icon .fa-file-alt { 
+        color: #6c757d; 
+    }
+    .file-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #1e293b;
+        word-break: break-word;
+        max-width: 140px;
+        padding: 4px 8px;
+        border-radius: 30px;
+    }
+    .file-grid-item:hover .file-name {
+        background: #eef2ff;
+        color: #1e40af;
+    }
+    .file-meta {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #64748b;
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .file-meta span {
+        background: #f1f5f9;
+        border-radius: 999px;
+        padding: 2px 8px;
+        line-height: 1.4;
+    }
 </style>
 
     
@@ -650,6 +733,12 @@
         `;
 
         tableBody.prepend(newRow);
+
+        const gridWrapper = document.getElementById('gridWrapper');
+        if (gridWrapper && gridWrapper.style.display === 'block') {
+            syncGridFromList();
+        }
+
         closeModal();
         
         // Reset Form Modal
@@ -713,25 +802,82 @@
         closeApprovalModal();
     }
 
-    function switchView(viewType) {
-    const wrapper = document.getElementById('projectWrapper');
+function escapeHtml(value) {
+    if (!value) return '';
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function getFileIconClass(fileName) {
+    const lower = (fileName || '').toLowerCase();
+    if (lower.endsWith('.doc') || lower.endsWith('.docx')) return 'fa-file-word';
+    if (lower.endsWith('.xls') || lower.endsWith('.xlsx')) return 'fa-file-excel';
+    if (lower.endsWith('.pdf')) return 'fa-file-pdf';
+    if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.gif')) return 'fa-file-image';
+    return 'fa-file-alt';
+}
+
+function syncGridFromList() {
+    const fileGrid = document.getElementById('fileGrid');
+    const rows = document.querySelectorAll('#projectWrapper .project-list tbody tr');
+
+    if (!fileGrid) return;
+    fileGrid.innerHTML = '';
+
+    rows.forEach((row) => {
+        const id = row.cells[0] ? row.cells[0].innerText.trim() : '';
+        const fileName = row.cells[1] ? row.cells[1].innerText.trim() : 'Untitled';
+        const status = row.cells[3] ? row.cells[3].innerText.trim() : '';
+        const dueDate = row.cells[6] ? row.cells[6].innerText.trim() : '';
+        const iconClass = getFileIconClass(fileName);
+
+        const item = document.createElement('div');
+        item.className = 'file-grid-item';
+        item.addEventListener('click', function(e) {
+            openFileMenu(e, fileName);
+        });
+        item.addEventListener('contextmenu', function(e) {
+            openFileMenu(e, fileName);
+        });
+        item.innerHTML = `
+            <div class="file-icon"><i class="fas ${iconClass}"></i></div>
+            <div class="file-name">${escapeHtml(fileName)}</div>
+            <div class="file-meta">
+                <span>${escapeHtml(id)}</span>
+                <span>${escapeHtml(status)}</span>
+                <span>${escapeHtml(dueDate)}</span>
+            </div>
+        `;
+
+        fileGrid.appendChild(item);
+    });
+}
+
+function switchView(viewType) {
+    const listWrapper = document.getElementById('projectWrapper');
+    const gridWrapper = document.getElementById('gridWrapper');
     const btnList = document.getElementById('btnList');
     const btnGrid = document.getElementById('btnGrid');
 
     if (viewType === 'grid') {
-        wrapper.classList.remove('view-list');
-        wrapper.classList.add('view-grid');
-        
-        // Tukar warna butang aktif
+        syncGridFromList();
+        listWrapper.style.display = 'none';
+        gridWrapper.style.display = 'block';
         btnGrid.style.background = '#eee';
         btnList.style.background = '#fff';
+        btnGrid.classList.add('active');
+        btnList.classList.remove('active');
     } else {
-        wrapper.classList.remove('view-grid');
-        wrapper.classList.add('view-list');
-        
-        // Tukar warna butang aktif
+        listWrapper.style.display = 'block';
+        gridWrapper.style.display = 'none';
         btnList.style.background = '#eee';
         btnGrid.style.background = '#fff';
+        btnList.classList.add('active');
+        btnGrid.classList.remove('active');
     }
 }
 </script>

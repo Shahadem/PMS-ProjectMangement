@@ -39,7 +39,7 @@
                     <a href="/forgotpassword">Forgot Password?</a>
                 </div>
 
-                <button type="submit" class="btn-login">Sign In</button>
+                <button type="submit" class="btn-login">Log In</button>
             </form>
             
             <p class="signup-text">Don't have an account? <a href="{{ route('register.index') }}">Create one</a></p>

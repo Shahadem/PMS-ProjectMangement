@@ -20,7 +20,6 @@
                     {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
                     @endif
                 </div>
-                </div>
             </a>
             <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
             <nav class="nav-links">

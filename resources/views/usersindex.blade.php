@@ -56,17 +56,12 @@
 
     <section class="users-table-content">
         <div class="content-header">
-            
+            <h2 class="section-title">User Management</h2>
+            <button class="btn-add-user" type="button">+ Add New User</button>
         </div>
-
-    <section class="users-table-content">
+        <div class="breadcrumb">Other Users</div>
         <table class="users-table">
             <thead>
-                <div class="">
-                    <h2 class="section-title">User Management</h2>
-                    <button class="btn-add-user" type="button">+ Add New User</button>
-                </div>
-                <div class="breadcrumb">Other Users</div>
                 <tr>
                     <th><input type="checkbox"></th>
                     <th>ID</th>
@@ -280,6 +275,8 @@
             </tbody>
         </table>
     </section>
+</div>
+    </main>
 </div>
     <div id="addUserModal" class="modal-overlay">
     <div class="modal-content">

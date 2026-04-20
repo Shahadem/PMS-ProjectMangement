@@ -92,6 +92,10 @@
     </tbody>
     </table>
 </div>
+            </section>
+        </div>
+    </main>
+</div>
 <div class="p-modal-fixed-overlay" id="createProjectModal">
         <div class="p-modal-container">
             <div class="p-modal-top">
@@ -166,15 +170,6 @@ function toggleActionMenu(event, element) {
     currentCell.classList.toggle('active-action');
 }
 
-// 5. Tutup semua menu secara automatik jika user klik di luar kawasan table
-window.onclick = function(event) {
-    if (!event.target.closest('.action-dropdown')) {
-        document.querySelectorAll('.action-cell').forEach(cell => {
-            cell.classList.remove('active-action');
-        });
-    }
-};
-
 // Pastikan nama fungsi ni sepadan dengan onclick kat butang Create tadi
     function openCreateModal() {
         var modal = document.getElementById('createProjectModal');
@@ -190,13 +185,19 @@ window.onclick = function(event) {
         }
     }
 
-    // Tutup bila klik luar kotak
-    window.onclick = function(event) {
+    // Tutup dropdown/menu bila klik luar
+    window.addEventListener('click', function(event) {
+        if (!event.target.closest('.action-cell')) {
+            document.querySelectorAll('.action-cell').forEach(cell => {
+                cell.classList.remove('active-action');
+            });
+        }
+
         var modal = document.getElementById('createProjectModal');
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
+    });
 
     function updateDateDisplay(input) {
         const dateValue = input.value;

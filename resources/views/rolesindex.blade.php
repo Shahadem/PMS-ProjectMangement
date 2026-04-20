@@ -75,7 +75,7 @@
         <td>
             <div class="role-designation">
                 <div class="role-icon-circle"><i class="fas fa-user"></i></div>
-                <a href="/permissionmodule" style="text-decoration: none;"><span>Admin</span></a>
+                <a href="{{ route('permissionmodule.index') }}" style="text-decoration: none;"><span>Admin</span></a>
             </div>
         </td>
         <td class="text-date">23-11-2025 at 10:23PM</td>

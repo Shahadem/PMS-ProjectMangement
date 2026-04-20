@@ -84,9 +84,9 @@ thead th {
         <div class="users-layout-wrapper">
             
             <nav class="users-sub-nav">
-                <a href="/users" class="sub-link active">Admins</a>
-                <a href="/usersindex" class="sub-link">Users</a>
-                <a href="/rolesindex" class="sub-link">Roles</a>
+                <a href="{{ route('users.index') }}" class="sub-link active">Admins</a>
+                <a href="{{ route('usersindex.index') }}" class="sub-link">Users</a>
+                <a href="{{ route('rolesindex.index') }}" class="sub-link">Roles</a>
             </nav>
 
             <section class="users-table-content">

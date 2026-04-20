@@ -12,18 +12,23 @@
     <aside class="sidebar">
         <a href="{{ route('settings.index') }}" style="text-decoration: none;">
                  <div class="profile-circle">
-                    <div class="profile-avatar">IZ</div>
+                    @if(Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                            style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                        @endif
                 </div>
             </a>
-            <div class="username">Iskandar</div>
+            <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
              <nav class="nav-links">
-             <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+             <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
              <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
              <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
              <a href="{{ route('users.index') }}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
              <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
              </nav>
-            <a href="/" class="logout">Log Out</a>
+            <a href="{{ route('logout') }}" class="logout">Log Out</a>
         </aside>
 
     <main class="main-container">
@@ -49,12 +54,17 @@
         <a href="{{ route('rolesindex.index') }}" class="sub-link">Roles</a>
     </nav>
 
+    <section class="users-table-content">
+        <div class="content-header">
+            
+        </div>
 
     <section class="users-table-content">
         <table class="users-table">
             <thead>
                 <div class="">
                     <h2 class="section-title">User Management</h2>
+                    <button class="btn-add-user" type="button">+ Add New User</button>
                 </div>
                 <div class="breadcrumb">Other Users</div>
                 <tr>
@@ -68,7 +78,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="userTableBody">
                 <tr>
                     <td><input type="checkbox"></td>
                     <td class="text-muted">US001</td>
@@ -277,91 +287,41 @@
             <h2>Add New User</h2>
             <span class="close-modal" onclick="toggleModal()">&times;</span>
         </div>
-        <form action="#" method="POST">
+        <form id="addUserForm">
             <div class="form-row">
                 <div class="form-group full-width">
                     <label>Full Name</label>
-                    <input type="text" placeholder="Iskandar Zulkarnain">
+                    <input type="text" id="userName" placeholder="Iskandar Zulkarnain" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>User ID</label>
-                    <input type="text" placeholder="Enter ID">
+                    <input type="text" id="userId" placeholder="Enter ID" required>
                 </div>
                 <div class="form-group">
                     <label>Assign Role</label>
-                    <select>
-                        <option>Admin</option>
-                        <option selected>Contributor</option>
-                        <option>Guest</option>
+                    <select id="userRole">
+                        <option value="Admin">Admin</option>
+                        <option value="Contributor" selected>Contributor</option>
+                        <option value="Guest">Guest</option>
                     </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group full-width">
                     <label>Mac Address</label>
-                    <input type="text" placeholder="Enter Mac Address">
+                    <input type="text" id="userMac" placeholder="Enter Mac Address">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" placeholder="Enter Email">
+                    <input type="email" id="userEmail" placeholder="Enter Email" required>
                 </div>
                 <div class="form-group">
                     <label>Contact Number</label>
-                    <input type="text" placeholder="Enter Number">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" onclick="toggleModal()">Cancel</button>
-                <button type="submit" class="btn-submit">Add User(s)</button>
-            </div>
-        </form>
-    </div>
-</div>
-<div id="addUserModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Add New User</h2>
-            <span class="close-modal" onclick="toggleModal()">&times;</span>
-        </div>
-        <form action="#" method="POST">
-            <div class="form-row">
-                <div class="form-group full-width">
-                    <label>Full Name</label>
-                    <input type="text" placeholder="Iskandar Zulkarnain">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" placeholder="Enter ID">
-                </div>
-                <div class="form-group">
-                    <label>Assign Role</label>
-                    <select>
-                        <option>Admin</option>
-                        <option selected>Contributor</option>
-                        <option>Guest</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group full-width">
-                    <label>Mac Address</label>
-                    <input type="text" placeholder="Enter Mac Address">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="Enter Email">
-                </div>
-                <div class="form-group">
-                    <label>Contact Number</label>
-                    <input type="text" placeholder="Enter Number">
+                    <input type="text" id="userContact" placeholder="Enter Number" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -427,80 +387,25 @@
         </div>
     </div>
 <script>
-    function toggleRoleDropdown(element) {
-    // Tutup mana-mana dropdown lain yang tengah terbuka
-    document.querySelectorAll('.role-selector').forEach(sel => {
-        if (sel !== element) sel.classList.remove('active');
-    });
-
-    // Toggle (buka/tutup) dropdown yang diklik
-    element.classList.toggle('active');
-
-    // Halang klik ini daripada 'terlepas' ke window.onclick
-    event.stopPropagation();
-}
-
-// Tutup dropdown kalau user klik kat luar (mana-mana kawasan lain)
-window.onclick = function(event) {
-    if (!event.target.closest('.role-selector')) {
-        document.querySelectorAll('.role-selector').forEach(sel => {
-            sel.classList.remove('active');
-        });
-    }
-};
-
-function toggleModal() {
+    function toggleModal() {
         const modal = document.getElementById('addUserModal');
-        if (modal.style.display === "flex") {
-            modal.style.display = "none";
-        } else {
-            modal.style.display = "flex";
-        }
+        if (!modal) return;
+
+        const isOpen = modal.style.display === 'flex';
+        modal.style.display = isOpen ? 'none' : 'flex';
     }
 
-    // Sambungkan fungsi ke butang Create
-    document.querySelector('.btn-add-user').addEventListener('click', toggleModal);
-    document.querySelector('.add-user-link').addEventListener('click', toggleModal);
-
-    function showSection(sectionId, element) {
-    // 1. Sembunyikan semua seksyen kandungan
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => {
-        section.style.display = 'none';
-    });
-
-    // 2. Paparkan seksyen yang dipilih
-    document.getElementById(sectionId).style.display = 'block';
-
-    // 3. Buang kelas 'active' dari semua butang navigasi
-    const navItems = document.querySelectorAll('.sub-nav-item');
-    navItems.forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // 4. Tambah kelas 'active' pada butang yang diklik
-    element.classList.add('active');
-}
-// Pastikan nama fungsi ni sepadan dengan onclick kat butang Create tadi
     function openCreateModal() {
-        var modal = document.getElementById('createProjectModal');
+        const modal = document.getElementById('createProjectModal');
         if (modal) {
             modal.style.display = 'flex';
         }
     }
 
     function closeCreateModal() {
-        var modal = document.getElementById('createProjectModal');
+        const modal = document.getElementById('createProjectModal');
         if (modal) {
             modal.style.display = 'none';
-        }
-    }
-
-    // Tutup bila klik luar kotak
-    window.onclick = function(event) {
-        var modal = document.getElementById('createProjectModal');
-        if (event.target == modal) {
-            modal.style.display = "none";
         }
     }
 
@@ -514,8 +419,8 @@ function toggleModal() {
     function toggleActionDots(event, btn) {
         event.stopPropagation();
         const cell = btn.closest('.action-cell');
+        if (!cell) return;
 
-        // Close all other open dots dropdowns
         document.querySelectorAll('.action-cell.dots-active').forEach(c => {
             if (c !== cell) c.classList.remove('dots-active');
         });
@@ -524,29 +429,114 @@ function toggleModal() {
     }
 
     function selectRole(item, role) {
-        // Close the dropdown
-        item.closest('.action-cell').classList.remove('dots-active');
-        // Optional: update role display in the row
+        const actionCell = item.closest('.action-cell');
+        if (actionCell) {
+            actionCell.classList.remove('dots-active');
+        }
+
         const row = item.closest('tr');
-        const roleSelector = row.querySelector('.role-selector');
+        const roleSelector = row ? row.querySelector('.role-selector') : null;
         if (roleSelector) {
-            roleSelector.innerHTML = `<i class="far fa-user"></i> ${role} <i class="fas fa-pencil-alt edit-sm"></i>`;
+            roleSelector.innerHTML = `<i class="far fa-user"></i> ${role}`;
         }
     }
 
     function toggleRoleDropdown(el) {
         const cell = el.closest('.role-cell');
+        if (!cell) return;
+
         document.querySelectorAll('.role-cell.active').forEach(c => {
             if (c !== cell) c.classList.remove('active');
         });
         cell.classList.toggle('active');
     }
 
-// Close all dropdowns when clicking outside
-    document.addEventListener('click', function () {
-        document.querySelectorAll('.action-cell.dots-active').forEach(c => c.classList.remove('dots-active'));
-        document.querySelectorAll('.role-cell.active').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.btn-add-user').forEach(button => {
+        button.addEventListener('click', toggleModal);
     });
+
+    document.addEventListener('click', function(event) {
+        const addUserModal = document.getElementById('addUserModal');
+        const createProjectModal = document.getElementById('createProjectModal');
+
+        if (addUserModal && event.target === addUserModal) {
+            addUserModal.style.display = 'none';
+        }
+
+        if (createProjectModal && event.target === createProjectModal) {
+            createProjectModal.style.display = 'none';
+        }
+
+        if (!event.target.closest('.action-cell')) {
+            document.querySelectorAll('.action-cell.dots-active').forEach(c => c.classList.remove('dots-active'));
+        }
+
+        if (!event.target.closest('.role-cell')) {
+            document.querySelectorAll('.role-cell.active').forEach(c => c.classList.remove('active'));
+        }
+    });
+
+    const addUserForm = document.getElementById('addUserForm');
+    if (addUserForm) {
+        addUserForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('userName').value.trim();
+            const id = document.getElementById('userId').value.trim();
+            const role = document.getElementById('userRole').value;
+            const email = document.getElementById('userEmail').value.trim();
+            const contact = document.getElementById('userContact').value.trim();
+            const tableBody = document.getElementById('userTableBody');
+
+            if (!tableBody || !name || !id || !email || !contact) return;
+
+            const newRow = `
+                <tr class="row-selected">
+                    <td><input type="checkbox" checked></td>
+                    <td class="text-muted">${id}</td>
+                    <td>
+                        <div class="user-info">
+                            <strong>${name}</strong>
+                            <span>Last login just now</span>
+                        </div>
+                    </td>
+                    <td class="text-contact">${email}<br>${contact}</td>
+                    <td><span class="badge badge-blue">Project Team 2</span></td>
+                    <td class="role-cell">
+                        <div class="role-selector" onclick="toggleRoleDropdown(this)"><i class="far fa-user"></i> ${role}</div>
+                        <div class="role-dropdown">
+                            <div class="role-item"><strong>Admin</strong><p>Can manage account settings and edit</p></div>
+                            <div class="role-item active"><strong>Contributor</strong><p>Can view/edit project and tasks</p></div>
+                            <div class="role-item"><strong>Guest</strong><p>Can only view and comment</p></div>
+                        </div>
+                    </td>
+                    <td><a href="#" class="view-link">View Projects <i class="fas fa-pencil-alt edit-sm"></i></a></td>
+                    <td class="action-cell">
+                        <button type="button" class="btn-dots" onclick="toggleActionDots(event, this)">...</button>
+                        <div class="dots-dropdown">
+                            <div class="dots-item" onclick="selectRole(this, 'Admin')">
+                                <strong>Admin</strong>
+                                <p>Can manage account settings and edit</p>
+                            </div>
+                            <div class="dots-item" onclick="selectRole(this, 'Contributor')">
+                                <strong>Contributor</strong>
+                                <p>Can view/edit project and tasks</p>
+                            </div>
+                            <div class="dots-item" onclick="selectRole(this, 'Guest')">
+                                <strong>Guest</strong>
+                                <p>Can only view and comment</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+            addUserForm.reset();
+            toggleModal();
+        });
+    }
 </script>
+<script src="{{ asset('js/assign-roles-stack.js') }}"></script>
 </body>
 </html>

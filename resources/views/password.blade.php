@@ -15,15 +15,15 @@
                     <div class="profile-avatar">IZ</div>
                 </div>
             </a>
-            <div class="username">Iskandar</div>
+            <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
             <nav class="nav-links">
-                <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
                 <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{ route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="/" class="logout">Log Out</a>
+            <a href="{{ route('logout') }}" class="logout">Log Out</a>
         </aside>
 
         <main class="main-container">
@@ -158,4 +158,5 @@
         }
     }
     </script>
+<script src="{{ asset('js/assign-roles-stack.js') }}"></script>
 </body>

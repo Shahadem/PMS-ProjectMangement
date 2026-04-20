@@ -14,18 +14,23 @@
         <aside class="sidebar">
             <a href="{{ route('settings.index') }}" style="text-decoration: none;">
                  <div class="profile-circle">
-                    <div class="profile-avatar">IZ</div>
+                    @if(Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                            style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                        @endif
                 </div>
             </a>
-            <div class="username">Iskandar</div>
+            <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
             <nav class="nav-links">
-                <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
                 <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="/" class="logout">Log Out</a>
+            <a href="{{ route('logout') }}" class="logout">Log Out</a>
         </aside>
 
 
@@ -65,6 +70,18 @@
             <div class="detail-layout">
                 <div class="left-content">
                 <div class="action-card">
+                    @php
+                        $getFileMeta = function($file) {
+                            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                            return match($ext) {
+                                'pdf' => ['icon' => 'fa-file-pdf', 'color' => 'text-red'],
+                                'doc', 'docx' => ['icon' => 'fa-file-word', 'color' => 'text-blue'],
+                                'xls', 'xlsx' => ['icon' => 'fa-file-excel', 'color' => 'text-green'],
+                                'png', 'jpg', 'jpeg', 'gif' => ['icon' => 'fa-file-image', 'color' => 'text-blue'],
+                                default => ['icon' => 'fa-file-alt', 'color' => 'text-blue'],
+                            };
+                        };
+                    @endphp
                     <h3>Action Required</h3>
                     <table class="action-table">
             @php
@@ -76,17 +93,18 @@
                 ];
             @endphp
             @foreach($actions as $item)
+            @php $meta = $getFileMeta($item['file']); @endphp
             <tr>
                 <td width="30%" 
                     onclick="openFileMenu(event, '{{ $item['file'] }}')" 
                     oncontextmenu="openFileMenu(event, '{{ $item['file'] }}')" 
                     style="cursor: pointer;">
-                    <i class="fas fa-file-alt text-blue"></i> {{ $item['file'] }}
+                    <i class="fas {{ $meta['icon'] }} {{ $meta['color'] }}"></i> {{ $item['file'] }}
                 </td>
                 <td width="15%">Project 1</td>
                 <td width="20%"><span class="status-pending"><i class="far fa-eye"></i> Pending Review</span></td>
                 <td width="15%">
-                    <div class="avatar-group">
+                    <div class="avatar-group assignee-trigger">
                         <img src="https://i.pravatar.cc/150?u=1" alt="u1">
                         <img src="https://i.pravatar.cc/150?u=2" alt="u2">
                         <div class="avatar-count">+2</div>
@@ -139,6 +157,7 @@
 
         <tbody>
 
+            @php $propMeta = $getFileMeta('Proposal.doc'); @endphp
             @for($i=0; $i<10; $i++)
 
             <tr style="border-bottom: 1px solid #f7fafc;">
@@ -151,7 +170,7 @@
 
                     style="cursor: pointer;">
 
-                    <i class="fas fa-file-alt text-blue"></i> Proposal.doc
+                    <i class="fas {{ $propMeta['icon'] }} {{ $propMeta['color'] }}"></i> Proposal.doc
 
                 </td>
 
@@ -161,7 +180,7 @@
 
                 <td>
 
-                    <div class="avatar-group">
+                    <div class="avatar-group assignee-trigger">
 
                         <img src="https://i.pravatar.cc/150?u=a" alt="u">
 
@@ -207,7 +226,7 @@
 
                     <div class="task-item">
                         <i class="fas fa-users"></i> <span>Assigned Users</span>
-                        <div class="avatar-group" style="justify-content: flex-end;">
+                        <div class="avatar-group assignee-trigger" style="justify-content: flex-end;">
                             <img src="https://i.pravatar.cc/150?u=9" alt="u">
                             <img src="https://i.pravatar.cc/150?u=8" alt="u">
                             <img src="https://i.pravatar.cc/150?u=7" alt="u">
@@ -257,7 +276,7 @@
                         <button onclick="addComment()" class="btn-submit">Submit</button>
                     </div>
                 </div>
-            </div>
+            </div>  
         </main>
     </div>
 
@@ -348,57 +367,7 @@
 </div>
 
 
-<div id="approvalModal" class="modal">
-    <div class="modal-content" style="background: #fff; padding: 24px; border-radius: 16px; width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); font-family: 'Segoe UI', Roboto, sans-serif;">
-        
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h2 style="font-size: 18px; font-weight: 700; color: #2d3748; margin: 0;">Submit for Approval</h2>
-            <i class="fas fa-times" style="cursor:pointer; color: #cbd5e0; font-size: 18px;" onclick="closeApprovalModal()"></i>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 10px;">
-                <i class="fas fa-user-check" style="margin-right: 8px; color: #a0aec0;"></i> Assign Approvers
-            </label>
-            <div style="display: flex; align-items: center; gap: 5px;">
-                <div class="avatar-group" style="display: flex; align-items: center;">
-                    <img src="https://i.pravatar.cc/150?u=1" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; margin-right: -12px; position: relative; z-index: 3;" alt="u1">
-                    <img src="https://i.pravatar.cc/150?u=siti" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; margin-right: -12px; position: relative; z-index: 2;" alt="u2">
-                    <img src="https://i.pravatar.cc/150?u=abu" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; position: relative; z-index: 1;" alt="u3">
-                    <div style="width: 35px; height: 35px; border-radius: 50%; background: #edf2f7; color: #718096; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; margin-left: -12px; position: relative; z-index: 0;">+2</div>
-                </div>
-                <div style="width: 35px; height: 35px; border-radius: 50%; border: 1px dashed #cbd5e0; display: flex; align-items: center; justify-content: center; color: #cbd5e0; cursor: pointer; margin-left: 15px;" onclick="alert('Add Approver Clicked')">
-                    <i class="fas fa-plus" style="font-size: 14px;"></i>
-                </div>
-            </div>
-        </div>
-
-        <div style="margin-bottom: 28px;">
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 12px;">
-                <i class="fas fa-flag" style="margin-right: 8px; color: #a0aec0;"></i> Priority
-            </label>
-            <div style="display: flex; gap: 12px; justify-content: space-between;">
-                <label class="priority-option" style="flex:1; cursor:pointer;">
-                    <input type="radio" name="priority" value="Low" hidden>
-                    <div class="priority-box"><span class="dot dot-low"></span> Low</div>
-                </label>
-                <label class="priority-option" style="flex:1; cursor:pointer;">
-                    <input type="radio" name="priority" value="Medium" hidden>
-                    <div class="priority-box"><span class="dot dot-medium"></span> Medium</div>
-                </label>
-                <label class="priority-option" style="flex:1; cursor:pointer;">
-                    <input type="radio" name="priority" value="High" hidden>
-                    <div class="priority-box"><span class="dot dot-high"></span> High</div>
-                </label>
-            </div>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: 12px; padding-top: 20px; border-top: 1px solid #f7fafc;">
-            <button onclick="closeApprovalModal()" style="padding: 12px 24px; border: none; background: #f7fafc; color: #718096; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;">Cancel</button>
-            <button onclick="confirmApprovalSubmit()" style="padding: 12px 24px; border: none; background: #3182ce; color: white; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;">Submit for Approval</button>
-        </div>
-    </div>
-</div>
+<script src="{{ asset('js/assign-roles-stack.js') }}"></script>
 
 <style>
     #endDateInput::-webkit-calendar-picker-indicator {
@@ -711,18 +680,20 @@
         newRow.style.borderBottom = "1px solid #f7fafc";
         
         const fileNameForJS = uploadedFileName;
+        const iconClass = getFileIconClass(fileNameForJS);
+        const colorClass = getFileColorClass(fileNameForJS);
 
         newRow.innerHTML = `
             <td style="padding: 15px 12px;">TS${Math.floor(100 + Math.random() * 900)}</td>
             <td onclick="openFileMenu(event, '${fileNameForJS}')" 
                 oncontextmenu="openFileMenu(event, '${fileNameForJS}')" 
                 style="cursor: pointer;">
-                <i class="fas fa-file-alt text-blue"></i> ${uploadedFileName}
+                <i class="fas ${iconClass} ${colorClass}"></i> ${uploadedFileName}
             </td>
             <td>Project 1</td>
             <td><span class="status-pending">Pending Review</span></td>
             <td>
-                <div class="avatar-group">
+                <div class="avatar-group assignee-trigger">
                     <img src="https://i.pravatar.cc/150?u=new" alt="u">
                     <div class="avatar-count">+0</div>
                 </div>
@@ -768,38 +739,24 @@
     // Kemaskini fungsi sedia ada ini
     function handleMenuAction(action) {
         if (action === 'submit') {
-            openApprovalModal();
-        } else {
-            alert(`Action: ${action} untuk fail ${currentSelectedFile}`);
-        }
-    }
+            // Cari elemen stack dalam baris yang sama untuk mengekalkan konteks user
+            const rows = document.querySelectorAll('.project-list tbody tr, .action-table tr');
+            let targetStack = null;
+            for (let row of rows) {
+                if (row.innerText.includes(currentSelectedFile)) {
+                    targetStack = row.querySelector('.assignee-trigger');
+                    break;
+                }
+            }
 
-    let selectedPriority = "";
-
-    function openApprovalModal() {
-        document.getElementById('approvalModal').style.display = 'flex';
-    }
-
-    function closeApprovalModal() {
-        document.getElementById('approvalModal').style.display = 'none';
-    }
-
-    function handleMenuAction(action) {
-        if (action === 'submit') {
-            openApprovalModal();
+            if (window.triggerApprovalModal && targetStack) {
+                window.triggerApprovalModal(targetStack, currentSelectedFile);
+            } else {
+                alert(`Submit Approval flow for: ${currentSelectedFile}`);
+            }
         } else {
             alert(`Action: ${action} pada ${currentSelectedFile}`);
         }
-    }
-
-    function confirmApprovalSubmit() {
-        const priority = document.querySelector('input[name="priority"]:checked');
-        if(!priority) {
-            alert("Sila pilih priority!");
-            return;
-        }
-        alert("Berjaya dihantar!");
-        closeApprovalModal();
     }
 
 function escapeHtml(value) {
@@ -819,6 +776,14 @@ function getFileIconClass(fileName) {
     if (lower.endsWith('.pdf')) return 'fa-file-pdf';
     if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.gif')) return 'fa-file-image';
     return 'fa-file-alt';
+}
+
+function getFileColorClass(fileName) {
+    const lower = (fileName || '').toLowerCase();
+    if (lower.endsWith('.doc') || lower.endsWith('.docx')) return 'text-blue';
+    if (lower.endsWith('.xls') || lower.endsWith('.xlsx')) return 'text-green';
+    if (lower.endsWith('.pdf')) return 'text-red';
+    return 'text-blue';
 }
 
 function syncGridFromList() {
@@ -881,5 +846,6 @@ function switchView(viewType) {
     }
 }
 </script>
+<script src="{{ asset('js/assign-roles-stack.js') }}"></script>
 </body>
 </html>

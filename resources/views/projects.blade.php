@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,18 +25,23 @@
         <aside class="sidebar">
             <a href="{{ route('settings.index') }}" style="text-decoration: none;">
                  <div class="profile-circle">
-                    <div class="profile-avatar">IZ</div>
+                    @if(Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                            style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                        @endif
                 </div>
             </a>
-            <div class="username">Iskandar</div>
+            <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
             <nav class="nav-links">
-                <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
                 <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{ route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="/" class="logout">Log Out</a>
+            <a href="{{ route('logout') }}" class="logout">Log Out</a>
         </aside>
 
         <main class="main-container">
@@ -135,10 +140,8 @@
                 </div>
                 <div class="p-field-item">
                     <label>Tags</label>
-                    <select id="projectTagInput" class="p-main-input">
-                        <option>Normal</option>
-                        <option>Urgent</option>
-                    </select>
+                    <input type="text" id="projectTagInput" class="p-main-input" placeholder="e.g. Normal, Urgent">
+                    <div id="projectTagsPreview" class="project-tags-preview"></div>
                 </div>
                 <div class="p-field-item">
                     <label>Add Roles</label>
@@ -157,6 +160,21 @@
                         <i class="fas fa-chevron-down p-chev-icon"></i>
                         <input type="date" class="p-hidden-date-actual" id="projectDateInput" onchange="updateDateDisplay(this)">
                     </div>
+                </div>
+            </div>
+
+            <div class="p-task-section">
+                <label class="p-add-task-label">Create New Task <i class="fas fa-plus"></i></label>
+                <div class="create-task-inline">
+                    <input type="text" id="newTaskNameInput" class="p-main-input" placeholder="Task name">
+                    <select id="newTaskStatusInput" class="p-main-input">
+                        <option value="On-going" selected>On-going</option>
+                        <option value="Completed">Completed</option>
+                        <option value="On Hold">On Hold</option>
+                    </select>
+                    <button type="button" class="p-btn-blue p-add-task-btn" onclick="createNewTaskOption()">
+                        Add Task
+                    </button>
                 </div>
             </div>
 
@@ -272,6 +290,35 @@
             margin-left: 4px;
         }
 
+        .create-task-inline {
+            display: grid;
+            grid-template-columns: 1fr 150px 110px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .p-add-task-btn {
+            padding: 9px 12px;
+            border-radius: 8px;
+        }
+
+        .project-tags-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+            min-height: 22px;
+        }
+
+        .project-tag-chip {
+            background: #eef2ff;
+            color: #3b82f6;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 3px 8px;
+        }
+
         .new-project-badge {
             display: inline-block;
             background: #eef2f7;
@@ -304,118 +351,163 @@
             cursor: pointer;
             border: none;
             background: transparent;
+            z-index: 10;
+        }
+
+        .p-timeline-box-custom i, 
+        .p-timeline-box-custom span {
+            pointer-events: none;
         }
     </style>
 <script>
-    // Pastikan nama fungsi ni sepadan dengan onclick kat butang Create tadi
-    function openCreateModal() {
-        var modal = document.getElementById('createProjectModal');
-        if (modal) {
-            modal.style.display = 'flex';
-        }
+    const STATUS_META = {
+        'On-going': { badge: 'badge-blue', pct: '20%' },
+        'Completed': { badge: 'badge-green', pct: '100%' },
+        'On Hold': { badge: 'badge-grey', pct: '' }
+    };
+
+    const existingProjectIds = Array.from(document.querySelectorAll('tr.row-main[data-project]'))
+        .map(row => parseInt(row.getAttribute('data-project'), 10))
+        .filter(Number.isFinite);
+    let projectCounter = existingProjectIds.length ? Math.max(...existingProjectIds) : 0;
+    let createdTaskCounter = 100;
+
+    function parseTags(rawTags) {
+        return rawTags
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(Boolean)
+            .slice(0, 4);
     }
 
-    function closeCreateModal() {
-        var modal = document.getElementById('createProjectModal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-    }
+    function renderTagsPreview() {
+        const tagInput = document.getElementById('projectTagInput');
+        const preview = document.getElementById('projectTagsPreview');
+        if (!tagInput || !preview) return;
 
-    // Tutup bila klik luar kotak
-    window.onclick = function(event) {
-        var modal = document.getElementById('createProjectModal');
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+        const tags = parseTags(tagInput.value);
+        preview.innerHTML = tags.map(tag => `<span class="project-tag-chip">${tag}</span>`).join('');
     }
 
     function updateDateDisplay(input) {
-        if (input.value) {
-            const [year, month, day] = input.value.split('-');
-            document.getElementById('date-display').textContent = `${day}/${month}/${year}`;
+        const display = document.getElementById('date-display');
+        if (!display) return;
+
+        if (!input.value) {
+            display.textContent = 'Select date';
+            return;
         }
+
+        const [year, month, day] = input.value.split('-');
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        display.textContent = `${day} ${months[parseInt(month, 10) - 1]} ${year}`;
     }
 
+    function openCreateModal() {
+        const modal = document.getElementById('createProjectModal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeCreateModal() {
+        const modal = document.getElementById('createProjectModal');
+        if (modal) modal.style.display = 'none';
+        resetForm();
+    }
+
+    function resetForm() {
+        const form = document.getElementById('createProjectForm');
+        const dateDisplay = document.getElementById('date-display');
+        const error = document.getElementById('formError');
+        const preview = document.getElementById('projectTagsPreview');
+
+        if (form) form.reset();
+        if (dateDisplay) dateDisplay.textContent = 'Select date';
+        if (error) error.style.display = 'none';
+        if (preview) preview.innerHTML = '';
+        document.querySelectorAll('#existingTasksList [data-created-task="true"]').forEach(node => node.remove());
+    }
+
+    function getStatusMeta(status) {
+        return STATUS_META[status] || STATUS_META['On-going'];
+    }
+
+    function createTaskCheckboxMarkup(taskId, taskName, status, pct, badge, indexKey) {
+        return `
+            <label class="task-checkbox-row" for="${indexKey}" data-created-task="true">
+                <input type="checkbox" id="${indexKey}"
+                    data-id="${taskId}"
+                    data-name="${taskName}"
+                    data-status="${status}"
+                    data-pct="${pct}"
+                    data-badge="${badge}" checked>
+                <span class="task-check-info">
+                    <i class="fas fa-file-alt text-blue"></i>
+                    <span class="task-check-name">${taskName}</span>
+                    <span class="task-check-project">New Task</span>
+                </span>
+                <span class="prog-badge ${badge}" style="font-size:10px; padding:2px 8px;">
+                    ${status} ${pct}
+                </span>
+            </label>
+        `;
+    }
+
+    function createNewTaskOption() {
+        const nameInput = document.getElementById('newTaskNameInput');
+        const statusInput = document.getElementById('newTaskStatusInput');
+        const list = document.getElementById('existingTasksList');
+        if (!nameInput || !statusInput || !list) return;
+
+        const taskName = nameInput.value.trim();
+        if (!taskName) {
+            nameInput.focus();
+            return;
+        }
+
+        const status = statusInput.value;
+        const meta = getStatusMeta(status);
+        createdTaskCounter += 1;
+        const taskId = `TS${String(createdTaskCounter).padStart(3, '0')}`;
+        const indexKey = `task_new_${Date.now()}`;
+
+        list.insertAdjacentHTML(
+            'afterbegin',
+            createTaskCheckboxMarkup(taskId, taskName, status, meta.pct, meta.badge, indexKey)
+        );
+
+        nameInput.value = '';
+        nameInput.focus();
+    }
 
     function toggleProject(id) {
         const children = document.querySelectorAll(`tr[data-child="${id}"]`);
         const icon = document.getElementById(`icon-${id}`);
-
         children.forEach(row => row.classList.toggle('hidden'));
-        icon.classList.toggle('rotated');
+        if (icon) icon.classList.toggle('rotated');
     }
 
-    let projectCounter = 3; // FD001 and FD002 already exist
-
-    // ── Modal open/close ────────────────────────────
-    function openCreateModal() {
-        document.getElementById('createProjectModal').style.display = 'flex';
-    }
-
-    function closeCreateModal() {
-        document.getElementById('createProjectModal').style.display = 'none';
-        resetForm();
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById('createProjectModal');
-        if (event.target === modal) closeCreateModal();
-    }
-
-    function resetForm() {
-        document.getElementById('projectNameInput').value = '';
-        document.getElementById('projectDateInput').value = '';
-        document.getElementById('date-display').textContent = 'Select date';
-        document.getElementById('formError').style.display = 'none';
-        document.querySelectorAll('#existingTasksList input[type="checkbox"]').forEach(cb => cb.checked = false);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const timelineBox = document.querySelector('.p-timeline-box-custom');
-        const dateInput = document.getElementById('projectDateInput');
-
-        if (timelineBox && dateInput) {
-            timelineBox.addEventListener('click', function(event) {
-                if (event.target !== dateInput) {
-                    dateInput.focus();
-                    if (typeof dateInput.showPicker === 'function') {
-                        dateInput.showPicker();
-                    }
-                }
-            });
-        }
-    });
-
-    // ── Date display ────────────────────────────────
-    function updateDateDisplay(input) {
-        if (input.value) {
-            const [year, month, day] = input.value.split('-');
-            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            document.getElementById('date-display').textContent = `${day} ${months[parseInt(month)-1]} ${year}`;
-        }
-    }
-
-    // ── Submit & add to table ───────────────────────
     function submitProject(e) {
         e.preventDefault();
 
         const name = document.getElementById('projectNameInput').value.trim();
+        const tagInput = document.getElementById('projectTagInput');
+        const tags = parseTags(tagInput ? tagInput.value : '');
         const date = document.getElementById('date-display').textContent;
         const error = document.getElementById('formError');
+        const tableBody = document.querySelector('.project-list tbody');
 
         if (!name) {
             error.style.display = 'block';
             document.getElementById('projectNameInput').focus();
             return;
         }
+        if (!tableBody) return;
 
         error.style.display = 'none';
-        projectCounter++;
-        const projectId = `FD00${projectCounter}`;
-        const tableBody = document.querySelector('.project-list tbody');
+        projectCounter += 1;
+        const projectId = `FD${String(projectCounter).padStart(3, '0')}`;
+        const projectTags = tags.length ? tags.map(tag => `<span class="project-tag-chip">${tag}</span>`).join('') : '';
 
-        // ── Add project row ──
         const projectRow = document.createElement('tr');
         projectRow.className = 'row-main';
         projectRow.setAttribute('data-project', projectCounter);
@@ -426,16 +518,15 @@
                 <i class="fas fa-briefcase text-blue"></i> ${name}
                 <i class="fas fa-caret-down toggle-icon" id="icon-${projectCounter}"></i>
             </td>
-            <td></td>
+            <td>${projectTags}</td>
             <td></td>
             <td>Just now</td>
-            <td>${date !== 'Select date' ? date : '—'}</td>
+            <td>${date !== 'Select date' ? date : '-'}</td>
             <td>...</td>
             <td><a href="#" class="timeline-link" onclick="event.stopPropagation()"><i class="far fa-clock"></i> Timeline View</a></td>
         `;
         tableBody.appendChild(projectRow);
 
-        // ── Add selected existing tasks as sub-rows ──
         const checkedTasks = document.querySelectorAll('#existingTasksList input[type="checkbox"]:checked');
         checkedTasks.forEach(cb => {
             const subRow = document.createElement('tr');
@@ -443,14 +534,14 @@
             subRow.setAttribute('data-child', projectCounter);
             subRow.setAttribute('onclick', `window.location='#'`);
             subRow.innerHTML = `
-                <td>${cb.dataset.id}</td>
+                <td>${cb.dataset.id || 'TS000'}</td>
                 <td class="pl-30">
-                    <i class="fas fa-file-alt text-blue"></i> ${cb.dataset.name}
+                    <i class="fas fa-file-alt text-blue"></i> ${cb.dataset.name || 'Task'}
                 </td>
                 <td>
-                    <div class="prog-badge ${cb.dataset.badge}">
-                        <span>${cb.dataset.status}</span>
-                        <span>${cb.dataset.pct}</span>
+                    <div class="prog-badge ${cb.dataset.badge || 'badge-blue'}">
+                        <span>${cb.dataset.status || 'On-going'}</span>
+                        <span>${cb.dataset.pct || ''}</span>
                     </div>
                 </td>
                 <td><div class="owner"><i class="fas fa-user-circle"></i> Iskandar Z</div></td>
@@ -462,12 +553,10 @@
             tableBody.appendChild(subRow);
         });
 
-        // ── Show success toast ──
         showToast(`Project "${name}" created successfully!`);
         closeCreateModal();
     }
 
-    // ── Toast notification ──────────────────────────
     function showToast(msg) {
         let toast = document.getElementById('globalToast');
         if (!toast) {
@@ -489,17 +578,48 @@
         toast.style.display = 'flex';
         setTimeout(() => {
             toast.style.opacity = '0';
-            setTimeout(() => toast.style.display = 'none', 300);
+            setTimeout(() => { toast.style.display = 'none'; }, 300);
         }, 3000);
     }
 
-    // ── Toggle project rows ─────────────────────────
-    function toggleProject(id) {
-        const children = document.querySelectorAll(`tr[data-child="${id}"]`);
-        const icon = document.getElementById(`icon-${id}`);
-        children.forEach(row => row.classList.toggle('hidden'));
-        if (icon) icon.classList.toggle('rotated');
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const timelineBox = document.querySelector('.p-timeline-box-custom');
+        const dateInput = document.getElementById('projectDateInput');
+        const tagInput = document.getElementById('projectTagInput');
+        const taskInput = document.getElementById('newTaskNameInput');
+
+        if (tagInput) {
+            tagInput.addEventListener('input', renderTagsPreview);
+        }
+
+        // Fix: Make the entire box clickable to show the calendar
+        if (timelineBox && dateInput) {
+            timelineBox.addEventListener('click', function() {
+                if (typeof dateInput.showPicker === 'function') {
+                    dateInput.showPicker();
+                } else {
+                    dateInput.click();
+                }
+            });
+        }
+
+        if (taskInput) {
+            taskInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    createNewTaskOption();
+                }
+            });
+        }
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('createProjectModal');
+            if (modal && event.target === modal) {
+                closeCreateModal();
+            }
+        });
+    });
 </script>
+<script src="{{ asset('js/assign-roles-stack.js') }}"></script>
 </body>
 </html>

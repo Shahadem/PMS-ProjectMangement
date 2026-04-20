@@ -44,6 +44,10 @@ input[type="checkbox"] {
     margin-right: 8px; 
 }
 
+.text-green {
+    color: #27ae60;
+}
+
 .text-muted { 
     color: #bbb; 
     padding : 1px;
@@ -1042,89 +1046,131 @@ input[type="checkbox"] {
     align-items: center;
 }
 
+/* Container Utama Modal */
 .modal-content {
-    background-color: white;
-    padding: 30px;
+    background: #fff;
     border-radius: 12px;
-    width: 500px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    padding: 30px;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    font-family: 'Inter', sans-serif; /* Pastikan font nampak moden */
 }
 
 .modal-header {
+    position: relative; /* Wajib ada supaya 'x' tahu hujung kanan header di mana */
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between; /* Ini akan tolak tajuk ke kiri dan 'x' ke kanan */
     margin-bottom: 20px;
 }
 
+/* Header */
 .modal-header h2 {
-    font-size: 18px;
-    margin: 0;
+    font-size: 1.25rem;
     color: #2d3748;
+    margin-bottom: 20px;
+    font-weight: 700;
 }
 
 .close-modal {
     cursor: pointer;
     font-size: 24px;
-    color: #aaa;
+    color: #a0aec0;
+    transition: color 0.2s;
+    
+    /* Tambah ini jika justify-content di atas tidak mencukupi */
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
+.close-modal:hover {
+    color: #2d3748;
+}
+
+/* Susunan Row */
 .form-row {
     display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.full-width { 
-    width: 100%; 
+    gap: 20px; /* Jarak antara dua input dalam satu baris */
+    margin-bottom: 18px;
 }
 
 .form-group {
-    flex: 1;
+    flex: 1; /* Supaya input ambil ruang sama rata */
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
 }
 
-.form-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.form-group input,
-.form-group select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 13px;
+.form-group.full-width {
+    flex: none;
     width: 100%;
 }
 
+/* Label */
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+/* Gaya Input & Select */
+.form-group input, 
+.form-group select {
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0; /* Warna border lebih lembut */
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2d3748;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+/* Efek bila klik (Focus) */
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Placeholder */
+.form-group input::placeholder {
+    color: #a0aec0;
+}
+
+/* Footer Buttons */
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 30px;
 }
 
 .btn-cancel {
-    background: white;
-    border: 1px solid #ddd;
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #4a5568;
+    font-weight: 600;
     cursor: pointer;
 }
 
 .btn-submit {
-    background: #3498db;
-    color: white;
-    border: none;
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 8px;
+    background: #3182ce;
+    color: #fff;
+    border: none;
+    font-weight: 600;
     cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover {
+    background: #2b6cb0;
 }
 
 /* Roles Table */
@@ -2078,30 +2124,47 @@ input[type="checkbox"] {
     align-items: center;
 }
 
-.avatar-group img {
+.avatar-group img,
+.avatar-group div {
     width: 28px;
     height: 28px;
     border-radius: 50%;
     border: 2px solid #fff;
     margin-left: -8px;
-}
-
-.avatar-group img:first-child { 
-    margin-left: 0; 
-}
-
-.avatar-count {
-    background: #edf2f7;
-    color: #718096;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.avatar-group img:first-child,
+.avatar-group div:first-child { 
+    margin-left: 0; 
+}
+
+.avatar-group .avatar-count,
+.avatar-group .more {
+    background: #edf2f7;
+    color: #718096;
     font-size: 10px;
-    margin-left: -8px;
-    border: 2px solid #fff;
+    font-weight: 700;
+    z-index: 1;
+}
+
+.avatar-group .avatar-add {
+    margin-left: 8px;
+    border: 1px dashed #cbd5e0;
+    background: transparent;
+    color: #cbd5e0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.avatar-group .avatar-add:hover {
+    color: #3182ce;
+    border-color: #3182ce;
+    background: #f0f7ff;
 }
 
 /* Right sidebar */
@@ -2224,4 +2287,3 @@ input[type="checkbox"] {
     line-height: 1.5;
     margin: 0;
 }
-

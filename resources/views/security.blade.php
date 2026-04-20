@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iskandar Dashboard</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,18 +13,24 @@
         <aside class="sidebar">
             <a href="{{ route('settings.index') }}" style="text-decoration: none;">
                  <div class="profile-circle">
-                    <div class="profile-avatar">IZ</div>
+                     @if(Auth::user()->avatar)
+                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                    style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                    @else
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    @endif
+                </div>
                 </div>
             </a>
-            <div class="username">Iskandar</div>
+            <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
             <nav class="nav-links">
-                <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
                 <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{ route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="/" class="logout">Log Out</a>
+            <a href="{{ route('logout') }}" class="logout">Log Out</a>
         </aside>
 
         <main class="main-container">
@@ -40,45 +47,47 @@
                 </div>
             </header>
 
-    <div class="settings-layout">
-    <nav class="settings-sub-nav">
-        <a href="{{ route('settings.index') }}" class="sub-nav-item">My Profile</a>
-        <a href="{{ route('security.index') }}" class="sub-nav-item active">Security</a>
-        <a href="{{ route('password.index') }}" class="sub-nav-item">Password</a>
-        <a href="{{ route('deleteaccount.index') }}" class="sub-nav-item">Account</a>    
-    </nav>
+            <div class="settings-flex-row">
+            <nav class="settings-sub-nav">
+                <a href="{{ route('settings.index') }}" class="sub-nav-item">My Profile</a>
+                <a href="{{ route('security.index') }}" class="sub-nav-item active">Security</a>
+                <a href="{{ route('password.index') }}" class="sub-nav-item">Password</a>
+                <a href="{{ route('deleteaccount.index') }}" class="sub-nav-item">Account</a>    
+            </nav>
 
-    <div class="p-security-container">
-    <h2>Set Two-Factor authentication</h2>
-    <p class="p-security-desc">
-        This platform requires you to protect your account with 2FA. How would you like to receive one-time passwords (OTP)?
-    </p>
+            <section class="profile-form-section">
+                <h2>Set Two-Factor authentication</h2>
+                <p class="p-security-desc">
+                    This platform requires you to protect your account with 2FA. How would you like to receive one-time passwords (OTP)?
+                </p>
 
-    <div class="p-2fa-options">
-        <label class="p-2fa-card">
-            <input type="radio" name="2fa_method" value="app" checked>
-                <span class="p-radio-custom"></span>
-                <div class="p-2fa-info">
-                    <strong>Mobile app authenticator</strong>
-                    <span>Use a mobile app to generate verification codes</span>
+                <div class="p-2fa-options">
+                    <label class="p-2fa-card">
+                        <input type="radio" name="2fa_method" value="app" checked>
+                            <span class="p-radio-custom"></span>
+                            <div class="p-2fa-info">
+                                <strong>Mobile app authenticator</strong>
+                                <span>Use a mobile app to generate verification codes</span>
+                            </div>
+                    </label>
+
+                    <label class="p-2fa-card">
+                        <input type="radio" name="2fa_method" value="email">
+                        <span class="p-radio-custom"></span>
+                        <div class="p-2fa-info">
+                            <strong>Email</strong>
+                            <span>Receive verification codes via email</span>
+                        </div>
+                    </label>
                 </div>
-        </label>
 
-        <label class="p-2fa-card">
-            <input type="radio" name="2fa_method" value="email">
-            <span class="p-radio-custom"></span>
-            <div class="p-2fa-info">
-                <strong>Email</strong>
-                <span>Receive verification codes via email</span>
+                <a href="{{ route('security_setup.index') }}" style="text-decoration: none;">
+                <button type="button" class="p-btn-continue">Continue</button>
+                </a>
+            </section>
             </div>
-        </label>
-    </div>
 
-    <a href="{{ route('security_setup.index') }}" style="text-decoration: none;">
-    <button type="button" class="p-btn-continue">Continue</button>
-    </a>
-</div>
-<div class="p-modal-fixed-overlay" id="createProjectModal">
+    <div class="p-modal-fixed-overlay" id="createProjectModal">
         <div class="p-modal-container">
             <div class="p-modal-top">
                 <h3>Create New Project</h3>
@@ -164,4 +173,8 @@
         }
     }
     </script>
+    <script src="{{ asset('js/assign-roles-stack.js') }}"></script>
+        </main>
+    </div>
 </body>
+</html>

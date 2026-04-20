@@ -8,16 +8,22 @@
     <p style="color: #718096; font-size: 15px; margin-bottom: 32px;">Join us to manage your task projects.</p>
 
     <div style="text-align: left; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 32px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04); margin-bottom: 24px;">
-        
-        <form action="#" method="POST">
+        @if ($errors->any())
+            <div style="margin-bottom: 20px; padding: 12px; border-radius: 10px; background: #FFF5F5; color: #C53030; font-size: 14px;">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <form action="{{ route('register.index') }}" method="POST">
+            @csrf
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 14px; font-weight: 700; color: #2D3748; margin-bottom: 8px;">Full Name</label>
-                <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px 16px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 15px; outline: none; transition: all 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='#3182CE'; this.style.boxShadow='0 0 0 3px rgba(49, 130, 206, 0.1)';" onblur="this.style.borderColor='#E2E8F0'; this.style.boxShadow='none';">
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="John Doe" autocomplete="name" style="width: 100%; padding: 12px 16px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 15px; outline: none; transition: all 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='#3182CE'; this.style.boxShadow='0 0 0 3px rgba(49, 130, 206, 0.1)';" onblur="this.style.borderColor='#E2E8F0'; this.style.boxShadow='none';" required>
             </div>
 
             <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 14px; font-weight: 700; color: #2D3748; margin-bottom: 8px;">Email Address</label>
-                <input type="email" placeholder="name@example.com" style="width: 100%; padding: 12px 16px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 15px; outline: none; transition: all 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='#3182CE'; this.style.boxShadow='0 0 0 3px rgba(49, 130, 206, 0.1)';" onblur="this.style.borderColor='#E2E8F0';">
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="name@example.com" autocomplete="email" style="width: 100%; padding: 12px 16px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 15px; outline: none; transition: all 0.2s; box-sizing: border-box;" onfocus="this.style.borderColor='#3182CE'; this.style.boxShadow='0 0 0 3px rgba(49, 130, 206, 0.1)';" onblur="this.style.borderColor='#E2E8F0';" required>
             </div>
 
             <div style="margin-bottom: 24px;">
@@ -26,14 +32,35 @@
                 <p style="font-size: 12px; color: #718096; margin-top: 6px;">Must be at least 8 characters long.</p>
             </div>
 
+            <input type="hidden" name="password" id="register-password-hidden">
+
             <button type="submit" style="width: 100%; padding: 14px; background: #3182CE; color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(49, 130, 206, 0.3);" onmouseover="this.style.background='#2B6CB0'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#3182CE'; this.style.transform='translateY(0)';" >
                 Create Account
             </button>
         </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const registerForm = document.querySelector('.p-register-container form');
+                const visiblePasswordInput = registerForm?.querySelector('input[type="password"]');
+                const hiddenPasswordInput = document.getElementById('register-password-hidden');
+
+                if (! registerForm || ! visiblePasswordInput || ! hiddenPasswordInput) {
+                    return;
+                }
+
+                const syncPassword = function () {
+                    hiddenPasswordInput.value = visiblePasswordInput.value;
+                };
+
+                visiblePasswordInput.addEventListener('input', syncPassword);
+                registerForm.addEventListener('submit', syncPassword);
+            });
+        </script>
     </div>
 
     <p style="color: #718096; font-size: 14px;">
         Already have an account? 
-        <a href="/" style="color: #3182CE; font-weight: 700; text-decoration: none; margin-left: 4px;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">Log In</a>
+        <a href="{{ route('login') }}" style="color: #3182CE; font-weight: 700; text-decoration: none; margin-left: 4px;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">Log In</a>
     </p>
 </div>

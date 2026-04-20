@@ -232,18 +232,23 @@
         <aside class="sidebar">
            <a href="{{ route('settings.index') }}" style="text-decoration: none;">
                  <div class="profile-circle">
-                    <div class="profile-avatar">IZ</div>
+                    @if(Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                            style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                        @endif
                 </div>
             </a>
-            <div class="username">Iskandar</div>
+            <div class="username">{{ explode(' ', Auth::user()->name)[0] }}</div>
             <nav class="nav-links">
-                <a href="{{ route('dashboard.index') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}"><i class="fas fa-home"></i>Dashboard</a>
                 <a href="{{ route('timeline.index') }}" class="nav-item {{ request()->is('timeline*') ? 'active' : '' }}"><i class="fas fa-clock"></i>Timeline</a>
                 <a href="{{ route('projects.index') }}" class="nav-item {{ request()->is('projects*') ? 'active' : '' }}"><i class="fas fa-folder"></i>Projects</a>
                 <a href="{{ route('users.index')}}" class="nav-item {{ request()->is('users*') ? 'active' : '' }}"><i class="fas fa-users"></i>Users</a>
                 <a href="{{route('settings.index') }}" class="nav-item {{ request()->is('settings*') ? 'active' : '' }}"><i class="fas fa-cog"></i>Settings</a>
             </nav>
-            <a href="/" class="logout">Log Out</a>
+            <a href="{{ route('logout') }}" class="logout">Log Out</a>
         </aside>
 
         <main class="main-container">
@@ -271,30 +276,48 @@
             </nav>
 
             <section class="profile-form-section">
+
+                @if(session('success'))
+    <div id="saveToast" class="save-toast" style="display:flex;">
+        <i class="fas fa-check-circle"></i> {{ session('success') }}
+    </div>
+    <script>
+        setTimeout(() => {
+            document.getElementById('saveToast').style.display = 'none';
+        }, 3000);
+    </script>
+    @endif
+
     <h2 class="section-heading">My Profile</h2>
 
     {{-- Profile Card Top --}}
     <div class="profile-card-top">
 
         {{-- Avatar with edit overlay --}}
-        <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()" title="Change photo">
-            <div class="large-avatar" id="avatarDisplay">IZ</div>
+        <div class="avatar-wrapper" onclick="document.getElementById('avatarFormInput').click()" title="Change photo">
+            <div class="large-avatar" id="avatarDisplay">
+                @if(Auth::user()->avatar)
+                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                    style="width:90px;height:90px;border-radius:50%;object-fit:cover;display:block;">
+                @else
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                @endif
+            </div>
             <div class="avatar-overlay">
                 <i class="fas fa-camera"></i>
             </div>
-            <input type="file" id="avatarInput" accept="image/*" hidden onchange="previewAvatar(this)">
         </div>
 
         <div class="user-meta">
             {{-- Editable name inline --}}
             <div class="inline-edit-group" id="nameDisplay">
-                <h3 id="nameText">Iskandar Zulkarnain</h3>
+                <h3 id="nameText">{{ Auth::user()->name }}</h3>
                 <button class="inline-edit-btn" onclick="toggleInlineEdit('name')">
                     <i class="fas fa-pencil-alt"></i>
                 </button>
             </div>
             <div class="inline-edit-group hidden" id="nameEdit">
-                <input type="text" id="nameInput" class="inline-text-input" value="Iskandar Zulkarnain">
+                <input type="text" id="nameInput" class="inline-text-input" value="{{ Auth::user()->name }}">
                 <button class="inline-save-btn" onclick="saveInlineEdit('name')">
                     <i class="fas fa-check"></i>
                 </button>
@@ -305,13 +328,13 @@
 
             {{-- Editable title inline --}}
             <div class="inline-edit-group" id="titleDisplay">
-                <p id="titleText">Senior Art Director</p>
+                <p id="titleText">{{ Auth::user()->title ?? 'Add your title' }}</p>
                 <button class="inline-edit-btn small" onclick="toggleInlineEdit('title')">
                     <i class="fas fa-pencil-alt"></i>
                 </button>
             </div>
             <div class="inline-edit-group hidden" id="titleEdit">
-                <input type="text" id="titleInput" class="inline-text-input small" value="Senior Art Director">
+                <input type="text" id="titleInput" class="inline-text-input small" value="{{ Auth::user()->title ?? '' }}">
                 <button class="inline-save-btn" onclick="saveInlineEdit('title')">
                     <i class="fas fa-check"></i>
                 </button>
@@ -323,12 +346,15 @@
     </div>
 
     {{-- Form Fields --}}
-    <form class="profile-grid-form" id="profileForm">
+    <form class="profile-grid-form" id="profileForm" action="{{ route('settings.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <input type="file" id="avatarFormInput" name="avatar" hidden accept="image/*" onchange="previewAvatar(this)">
         <div class="form-row">
             <div class="form-group">
                 <label>Full Name</label>
                 <div class="input-edit-wrapper">
-                    <input type="text" id="fullNameField" value="Iskandar Zulkarnain" disabled>
+                    <input type="text" id="fullNameField" name="name" value="{{ Auth::user()->name }}" disabled>
                     <button type="button" class="field-edit-btn" onclick="toggleField('fullNameField', this)">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
@@ -337,7 +363,7 @@
             <div class="form-group">
                 <label>Title</label>
                 <div class="input-edit-wrapper">
-                    <input type="text" id="titleField" value="Senior Art Director" disabled>
+                    <input type="text" id="titleField" name="title" value="{{ Auth::user()->title ?? ''}}" disabled>
                     <button type="button" class="field-edit-btn" onclick="toggleField('titleField', this)">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
@@ -348,7 +374,7 @@
             <div class="form-group">
                 <label>Email</label>
                 <div class="input-edit-wrapper">
-                    <input type="email" id="emailField" value="iskandar@gmail.com" disabled>
+                    <input type="email" id="emailField" name="email" value="{{ Auth::user()->email }}" disabled>
                     <button type="button" class="field-edit-btn" onclick="toggleField('emailField', this)">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
@@ -357,7 +383,7 @@
             <div class="form-group">
                 <label>Phone Number</label>
                 <div class="input-edit-wrapper">
-                    <input type="text" id="phoneField" value="017-7853 5385" disabled>
+                    <input type="text" id="phoneField" name="phone" value="{{ Auth::user()->phone }}" disabled>
                     <button type="button" class="field-edit-btn" onclick="toggleField('phoneField', this)">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
@@ -470,6 +496,7 @@
     function previewAvatar(input) {
         const file = input.files[0];
         if (!file) return;
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             const avatar = document.getElementById('avatarDisplay');
@@ -612,7 +639,7 @@
     function saveProfile(e) {
         e.preventDefault();
 
-        // Save any open fields
+        // Save any open fields first
         ['fullNameField','titleField','emailField','phoneField'].forEach(id => {
             const input = document.getElementById(id);
             if (input && !input.disabled) {
@@ -621,12 +648,8 @@
             }
         });
 
-        // Show toast
-        const toast = document.getElementById('saveToast');
-        toast.style.display = 'flex';
-        setTimeout(() => {
-            toast.style.display = 'none';
-        }, 3000);
+        // Submit the form
+        document.getElementById('profileForm').submit();
     }
 
     // ── Create Project Modal ─────────────────────────────────
@@ -650,4 +673,5 @@
         }
     }
 </script>
+<script src="{{ asset('js/assign-roles-stack.js') }}"></script>
 </html>
